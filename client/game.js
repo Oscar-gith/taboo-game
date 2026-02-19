@@ -583,3 +583,95 @@ function escapeHtml(str) {
 let _activeTeam = null;
 function getActiveTeam() { return _activeTeam; }
 socket.on('turn_started', ({ activeTeam }) => { _activeTeam = activeTeam; });
+
+// ── 7. TUTORIAL ──────────────────────────────────────────────────
+
+const TUTORIAL_SEEN_KEY = 'taboo_tutorial_seen';
+let currentTutorialSlide = 0;
+const totalTutorialSlides = 5;
+
+function showTutorial() {
+  currentTutorialSlide = 0;
+  updateTutorialSlide();
+  document.getElementById('tutorial-modal').classList.remove('hidden');
+}
+
+function hideTutorial() {
+  document.getElementById('tutorial-modal').classList.add('hidden');
+  localStorage.setItem(TUTORIAL_SEEN_KEY, 'true');
+}
+
+function updateTutorialSlide() {
+  // Update slides
+  document.querySelectorAll('.tutorial-slide').forEach((slide, i) => {
+    slide.classList.toggle('active', i === currentTutorialSlide);
+  });
+
+  // Update dots
+  document.querySelectorAll('.tutorial-dots .dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentTutorialSlide);
+  });
+
+  // Update buttons
+  const prevBtn = document.getElementById('btn-tutorial-prev');
+  const nextBtn = document.getElementById('btn-tutorial-next');
+
+  prevBtn.style.visibility = currentTutorialSlide === 0 ? 'hidden' : 'visible';
+
+  if (currentTutorialSlide === totalTutorialSlides - 1) {
+    nextBtn.textContent = '¡Entendido!';
+    nextBtn.classList.remove('btn-ghost');
+    nextBtn.classList.add('btn-primary');
+  } else {
+    nextBtn.textContent = 'Siguiente →';
+    nextBtn.classList.remove('btn-ghost');
+    nextBtn.classList.add('btn-primary');
+  }
+}
+
+function nextTutorialSlide() {
+  if (currentTutorialSlide < totalTutorialSlides - 1) {
+    currentTutorialSlide++;
+    updateTutorialSlide();
+  } else {
+    hideTutorial();
+  }
+}
+
+function prevTutorialSlide() {
+  if (currentTutorialSlide > 0) {
+    currentTutorialSlide--;
+    updateTutorialSlide();
+  }
+}
+
+function goToTutorialSlide(index) {
+  if (index >= 0 && index < totalTutorialSlides) {
+    currentTutorialSlide = index;
+    updateTutorialSlide();
+  }
+}
+
+// Tutorial event listeners
+document.getElementById('btn-help-home')?.addEventListener('click', showTutorial);
+document.getElementById('btn-help-lobby')?.addEventListener('click', showTutorial);
+document.getElementById('btn-tutorial-close')?.addEventListener('click', hideTutorial);
+document.getElementById('btn-tutorial-next')?.addEventListener('click', nextTutorialSlide);
+document.getElementById('btn-tutorial-prev')?.addEventListener('click', prevTutorialSlide);
+
+// Click on overlay to close
+document.querySelector('.modal-overlay')?.addEventListener('click', hideTutorial);
+
+// Dot navigation
+document.querySelectorAll('.tutorial-dots .dot').forEach(dot => {
+  dot.addEventListener('click', () => {
+    const slideIndex = parseInt(dot.dataset.slide, 10);
+    goToTutorialSlide(slideIndex);
+  });
+});
+
+// Auto-show tutorial on first visit
+if (!localStorage.getItem(TUTORIAL_SEEN_KEY)) {
+  // Small delay to ensure page is fully loaded
+  setTimeout(showTutorial, 300);
+}

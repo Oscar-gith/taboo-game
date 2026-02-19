@@ -13,6 +13,7 @@
        ============================================================ -->
   <div id="screen-home" class="screen active">
     <header class="game-header">
+      <button id="btn-help-home" class="btn-help" title="Cómo jugar">?</button>
       <h1 class="logo">TABOO</h1>
       <p class="subtitle">en línea · en español</p>
     </header>
@@ -61,6 +62,7 @@
        ============================================================ -->
   <div id="screen-lobby" class="screen">
     <header class="game-header">
+      <button id="btn-help-lobby" class="btn-help" title="Cómo jugar">?</button>
       <h2>Sala</h2>
       <div class="room-code-display">
         <span id="lobby-room-code">------</span>
@@ -242,6 +244,90 @@
         Jugar de nuevo
       </button>
     </main>
+  </div>
+
+  <!-- ============================================================
+       TUTORIAL MODAL
+       ============================================================ -->
+  <div id="tutorial-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content tutorial-content">
+      <button id="btn-tutorial-close" class="btn-modal-close">✕</button>
+
+      <div class="tutorial-slides">
+        <!-- Slide 1 -->
+        <div class="tutorial-slide active" data-slide="0">
+          <div class="tutorial-icon">🎯</div>
+          <h2>¡Bienvenido a Taboo!</h2>
+          <p>El objetivo es que tu equipo adivine la palabra secreta que tú describes.</p>
+          <p class="tutorial-detail">Pero cuidado... ¡hay palabras que no puedes decir!</p>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="tutorial-slide" data-slide="1">
+          <div class="tutorial-icon">👥</div>
+          <h2>Los Roles</h2>
+          <div class="tutorial-roles">
+            <div class="tutorial-role">
+              <span class="role-badge describer">Descriptor</span>
+              <p>Da pistas sin decir las palabras prohibidas</p>
+            </div>
+            <div class="tutorial-role">
+              <span class="role-badge guesser">Adivinador</span>
+              <p>Adivina la palabra con las pistas</p>
+            </div>
+            <div class="tutorial-role">
+              <span class="role-badge buzzer">Vigilante</span>
+              <p>Caza las palabras prohibidas del otro equipo</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="tutorial-slide" data-slide="2">
+          <div class="tutorial-icon">🚫</div>
+          <h2>Palabras Prohibidas</h2>
+          <p>El descriptor <strong>NO puede decir</strong>:</p>
+          <ul class="tutorial-list">
+            <li>La palabra principal</li>
+            <li>Las 5 palabras prohibidas de la carta</li>
+            <li>Variaciones (plurales, conjugaciones)</li>
+          </ul>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="tutorial-slide" data-slide="3">
+          <div class="tutorial-icon">🏆</div>
+          <h2>Puntuación</h2>
+          <div class="tutorial-scoring">
+            <div class="score-item correct">✓ Correcto <span>+1 punto</span></div>
+            <div class="score-item wrong">¡Prohibida! <span>−1 punto</span></div>
+            <div class="score-item skip">→ Pasar <span>0 puntos</span></div>
+          </div>
+          <p class="tutorial-detail">El primer equipo en llegar a 15 puntos gana.</p>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="tutorial-slide" data-slide="4">
+          <div class="tutorial-icon">🚀</div>
+          <h2>¡A jugar!</h2>
+          <p>Crea una sala nueva o únete con un código de 6 letras.</p>
+          <p class="tutorial-detail">Necesitas al menos 2 jugadores por equipo para comenzar.</p>
+        </div>
+      </div>
+
+      <div class="tutorial-nav">
+        <button id="btn-tutorial-prev" class="btn btn-ghost">← Anterior</button>
+        <div class="tutorial-dots">
+          <span class="dot active" data-slide="0"></span>
+          <span class="dot" data-slide="1"></span>
+          <span class="dot" data-slide="2"></span>
+          <span class="dot" data-slide="3"></span>
+          <span class="dot" data-slide="4"></span>
+        </div>
+        <button id="btn-tutorial-next" class="btn btn-primary">Siguiente →</button>
+      </div>
+    </div>
   </div>
 
   <!-- ============================================================

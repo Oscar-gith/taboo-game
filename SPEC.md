@@ -176,6 +176,38 @@ cards_ready      { totalCards }                           → all players in roo
 
 ---
 
+## Tutorial
+
+An interactive tutorial explains the game rules to new players.
+
+### Trigger Conditions
+- **First visit**: Automatically shown if `localStorage.getItem('taboo_tutorial_seen')` is `null`
+- **Help button**: A "?" button on home and lobby screens opens the tutorial manually
+- On completion or close: `localStorage.setItem('taboo_tutorial_seen', 'true')`
+
+### Format
+- Full-screen modal with dark overlay
+- 5 slides with navigation (Previous / Next buttons)
+- Progress indicators (dots: ● ○ ○ ○ ○)
+- Close button (✕) available on all slides
+
+### Tutorial Content
+
+| Slide | Title | Content |
+|-------|-------|---------|
+| 1 | ¡Bienvenido a Taboo! | El objetivo es que tu equipo adivine la palabra secreta |
+| 2 | Roles | **Descriptor**: da pistas. **Adivinadores**: adivinan. **Vigilantes**: cazan palabras prohibidas |
+| 3 | Palabras Prohibidas | No puedes decir la palabra principal ni las 5 palabras prohibidas listadas |
+| 4 | Puntuación | ✓ Correcto: +1 punto. ¡Prohibida!: -1 punto. Pasar: 0 puntos |
+| 5 | ¡A jugar! | Crea una sala o únete con un código de 6 letras |
+
+### UI Elements
+- Help button "?" visible on: `#screen-home`, `#screen-lobby`
+- Modal: `#tutorial-modal` (hidden by default)
+- No server-side changes required (100% client-side feature)
+
+---
+
 ## Room Code System
 
 - 6-character uppercase alphanumeric string (e.g. `XTBK92`)

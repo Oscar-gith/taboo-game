@@ -620,6 +620,227 @@ input[type="text"]::placeholder { color: var(--light); }
   background: var(--red);
 }
 
+/* ── HELP BUTTON ── */
+.btn-help {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--light);
+  background: var(--surface);
+  color: var(--medium);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-help:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.game-header {
+  position: relative;
+}
+
+/* ── MODAL ── */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal.hidden {
+  display: none;
+}
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(29, 53, 87, 0.85);
+  animation: fade-in 0.2s ease;
+}
+.modal-content {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  max-width: 440px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modal-in 0.3s ease;
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.btn-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg);
+  color: var(--medium);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  z-index: 10;
+}
+.btn-modal-close:hover {
+  background: var(--light);
+  color: var(--dark);
+}
+
+/* ── TUTORIAL CONTENT ── */
+.tutorial-content {
+  padding: 2rem 1.5rem 1.5rem;
+}
+.tutorial-slides {
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tutorial-slide {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  animation: fade-in 0.3s ease;
+}
+.tutorial-slide.active {
+  display: flex;
+}
+.tutorial-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+.tutorial-slide h2 {
+  color: var(--dark);
+  font-size: 1.5rem;
+}
+.tutorial-slide p {
+  color: var(--medium);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.tutorial-detail {
+  font-size: 0.9rem !important;
+  color: var(--light) !important;
+  margin-top: 0.5rem;
+}
+
+/* Tutorial roles display */
+.tutorial-roles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+.tutorial-role {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg);
+  border-radius: 8px;
+  text-align: left;
+}
+.tutorial-role .role-badge {
+  min-width: 90px;
+  text-align: center;
+}
+.tutorial-role p {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Tutorial list */
+.tutorial-list {
+  list-style: none;
+  text-align: left;
+  width: 100%;
+  padding: 0;
+}
+.tutorial-list li {
+  padding: 0.4rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--medium);
+}
+.tutorial-list li::before {
+  content: '✗';
+  position: absolute;
+  left: 0;
+  color: var(--red);
+  font-weight: 700;
+}
+
+/* Tutorial scoring */
+.tutorial-scoring {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.score-item.correct { background: rgba(42,157,143,0.15); color: var(--green); }
+.score-item.wrong   { background: rgba(230,57,70,0.1); color: var(--red); }
+.score-item.skip    { background: rgba(233,196,106,0.2); color: #8a6d00; }
+.score-item span    { font-weight: 700; }
+
+/* Tutorial navigation */
+.tutorial-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--light);
+}
+.tutorial-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+.tutorial-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--light);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.tutorial-dots .dot.active {
+  background: var(--blue);
+}
+.tutorial-dots .dot:hover {
+  background: var(--medium);
+}
+.tutorial-nav .btn {
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
 /* ── DESKTOP / TABLET ── */
 @media (min-width: 640px) {
   .screen { padding: 2rem; }
@@ -627,4 +848,6 @@ input[type="text"]::placeholder { color: var(--light); }
   .timer  { font-size: 4.5rem; }
   .main-word { font-size: 4rem; }
   .btn-buzz  { min-height: 100px; font-size: 2rem; }
+  .tutorial-content { padding: 2.5rem 2rem 2rem; }
+  .tutorial-slides { min-height: 320px; }
 }
