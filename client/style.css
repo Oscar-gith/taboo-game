@@ -646,6 +646,31 @@ input[type="text"]::placeholder { color: var(--light); }
 .game-header {
   position: relative;
 }
+.turn-header {
+  position: relative;
+}
+
+/* ── ROOM CODE BADGE (visible during game) ── */
+.room-code-badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--light);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--medium);
+  font-variant-numeric: tabular-nums;
+  z-index: 10;
+}
+/* Position badge on the right for turn screens (avoid timer overlap) */
+.turn-header .room-code-badge {
+  left: auto;
+  right: 0.5rem;
+}
 
 /* ── MODAL ── */
 .modal {

@@ -68,9 +68,6 @@ io.on('connection', (socket) => {
     if (!room) {
       return socket.emit('error', { code: 'ROOM_NOT_FOUND', message: 'Sala no encontrada. Verifica el código.' });
     }
-    if (room.state !== 'lobby') {
-      return socket.emit('error', { code: 'GAME_ALREADY_STARTED', message: 'El juego ya comenzó. No puedes unirte ahora.' });
-    }
 
     // Check if this player is reconnecting with a known ID
     if (existingPlayerId && room.reconnectPlayer(existingPlayerId, socket.id)) {
@@ -81,21 +78,52 @@ io.on('connection', (socket) => {
     }
 
     // New player joining — validate team selection
+    // Note: Players CAN join mid-game as spectators now (no GAME_ALREADY_STARTED check)
     const playerId = uuidv4();
-    const addError = room.addPlayer(socket.id, playerId, playerName, teamName, false);
+    const addResult = room.addPlayer(socket.id, playerId, playerName, teamName, false);
 
-    if (addError === 'INVALID_TEAM') {
+    if (addResult.error === 'INVALID_TEAM') {
       return socket.emit('error', { code: 'INVALID_TEAM', message: 'Equipo inválido. Elige Equipo A o Equipo B.' });
     }
-    if (addError === 'TEAM_FULL') {
+    if (addResult.error === 'TEAM_FULL') {
       return socket.emit('error', { code: 'TEAM_FULL', message: `${teamName} está lleno. Únete al otro equipo.` });
     }
 
     socket.join(room.code);
-    socket.emit('room_joined', { roomState: room.toPublicState(), playerId });
+    socket.emit('room_joined', { roomState: room.toPublicState(), playerId, isSpectator: addResult.isSpectator });
+
+    if (addResult.isSpectator) {
+      // Notify everyone that a spectator joined
+      io.to(room.code).emit('spectator_joined', { playerName, teamName });
+      console.log(`"${playerName}" joined room ${room.code} as spectator (${teamName})`);
+    } else {
+      socket.to(room.code).emit('room_updated', { roomState: room.toPublicState() });
+      console.log(`"${playerName}" joined room ${room.code} (${teamName})`);
+    }
+  });
+
+  // ── RECONNECT ROOM ────────────────────────────────────────
+
+  socket.on('reconnect_room', ({ roomCode, playerId, playerName }) => {
+    const room = gameManager.getRoom(roomCode);
+
+    // Check if room exists and player was in it
+    if (!room) {
+      return socket.emit('reconnect_failed', { reason: 'ROOM_NOT_FOUND' });
+    }
+
+    if (!room.hasPlayer(playerId)) {
+      return socket.emit('reconnect_failed', { reason: 'PLAYER_NOT_IN_ROOM' });
+    }
+
+    // Reconnect the player with new socket
+    room.reconnectPlayer(playerId, socket.id);
+    socket.join(room.code);
+
+    socket.emit('reconnect_success', { roomState: room.toPublicState(), playerId });
     socket.to(room.code).emit('room_updated', { roomState: room.toPublicState() });
 
-    console.log(`"${playerName}" joined room ${room.code} (${teamName})`);
+    console.log(`"${playerName}" reconnected to room ${room.code}`);
   });
 
   // ── START GAME ────────────────────────────────────────────
@@ -263,7 +291,10 @@ io.on('connection', (socket) => {
     if (!playerId) return;
 
     const roomCode = room.code;
-    console.log(`Player "${room.players[playerId]?.name}" disconnected from room ${roomCode}`);
+    const playerName = room.players[playerId]?.name;
+    const wasHost = playerId === room.hostPlayerId;
+
+    console.log(`Player "${playerName}" disconnected from room ${roomCode}`);
 
     // If the disconnected player was the active describer and turn is running, end the turn
     const isDescriber = (room.state === 'playing' &&
@@ -274,6 +305,13 @@ io.on('connection', (socket) => {
       const endData = room.endTurn();
       io.to(roomCode).emit('turn_ended', endData);
 
+      // Emit spectator_activated for any spectators that were activated
+      if (endData.activatedSpectators && endData.activatedSpectators.length > 0) {
+        endData.activatedSpectators.forEach(name => {
+          io.to(roomCode).emit('spectator_activated', { playerName: name });
+        });
+      }
+
       // Schedule the next turn after the pause
       setTimeout(() => {
         if (room.state === 'playing') {
@@ -281,6 +319,18 @@ io.on('connection', (socket) => {
           io.to(roomCode).emit('turn_started', turnInfo);
         }
       }, config.TURN_END_PAUSE_MS);
+    }
+
+    // If host disconnected, delegate to next player immediately
+    if (wasHost) {
+      const newHost = room.delegateHost();
+      if (newHost) {
+        io.to(roomCode).emit('host_changed', {
+          newHostName: newHost.name,
+          newHostId:   newHost.id,
+        });
+        console.log(`Host delegated to "${newHost.name}" in room ${roomCode}`);
+      }
     }
 
     // Notify the room
@@ -312,6 +362,13 @@ function _startTurnTimer(room, roomCode) {
 
       const endData = room.endTurn();
       io.to(roomCode).emit('turn_ended', endData);
+
+      // Emit spectator_activated for any spectators that were activated
+      if (endData.activatedSpectators && endData.activatedSpectators.length > 0) {
+        endData.activatedSpectators.forEach(name => {
+          io.to(roomCode).emit('spectator_activated', { playerName: name });
+        });
+      }
 
       // Check if the game should continue
       if (room.state === 'game_over') {

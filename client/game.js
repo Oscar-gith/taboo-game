@@ -19,14 +19,28 @@
 
 const socket = io();
 
-// Persistent player identity across page refreshes (not tab closes)
-let myPlayerId   = sessionStorage.getItem('taboo_playerId') || null;
-let myRoomCode   = null;
+// Persistent player identity in localStorage (survives browser refresh)
+let myPlayerId   = localStorage.getItem('taboo_player_id') || null;
+let myRoomCode   = localStorage.getItem('taboo_room_code') || null;
+let myPlayerName = localStorage.getItem('taboo_player_name') || null;
 let myRole       = null;   // 'describer' | 'guesser' | 'buzzer'
 let myTeamName   = null;
-let myPlayerName = null;   // Set when joining a room
 let currentCard  = null;   // Only set for the describer
 let currentScores = {};
+let isSpectator  = false;  // True if joined mid-game
+
+// Save player data to localStorage
+function savePlayerData() {
+  if (myPlayerId) localStorage.setItem('taboo_player_id', myPlayerId);
+  if (myRoomCode) localStorage.setItem('taboo_room_code', myRoomCode);
+  if (myPlayerName) localStorage.setItem('taboo_player_name', myPlayerName);
+}
+
+// Clear room data (when leaving or room expires)
+function clearRoomData() {
+  myRoomCode = null;
+  localStorage.removeItem('taboo_room_code');
+}
 
 // Generate DiceBear avatar URL from player name
 function getAvatarUrl(name) {
@@ -54,25 +68,155 @@ socket.on('room_created', ({ roomCode, roomState, playerId }) => {
   myRoomCode   = roomCode;
   myTeamName   = roomState.players[playerId]?.teamName || null;
   myPlayerName = roomState.players[playerId]?.name || null;
-  sessionStorage.setItem('taboo_playerId', playerId);
+  isSpectator  = false;
+  savePlayerData();
 
   document.getElementById('lobby-room-code').textContent = roomCode;
+  updateRoomCodeBadges(roomCode);
   renderLobby(roomState);
   showScreen('screen-lobby');
 });
 
 // Server accepted our join_room request
-socket.on('room_joined', ({ roomState, playerId }) => {
+socket.on('room_joined', ({ roomState, playerId, isSpectator: joinedAsSpectator }) => {
   myPlayerId   = playerId;
   myRoomCode   = roomState.code;
   myTeamName   = roomState.players[playerId]?.teamName || null;
   myPlayerName = roomState.players[playerId]?.name || null;
-  sessionStorage.setItem('taboo_playerId', playerId);
+  isSpectator  = joinedAsSpectator || false;
+  savePlayerData();
 
   document.getElementById('lobby-room-code').textContent = roomState.code;
-  renderLobby(roomState);
-  showScreen('screen-lobby');
+  updateRoomCodeBadges(roomState.code);
+
+  if (isSpectator) {
+    // Joined mid-game as spectator - show appropriate screen
+    showToast('Te uniste como espectador. Podrás jugar en la próxima ronda.', 'info');
+    // Navigate to the correct screen based on game state
+    navigateToGameState(roomState);
+  } else {
+    renderLobby(roomState);
+    showScreen('screen-lobby');
+  }
 });
+
+// Server accepted our reconnection
+socket.on('reconnect_success', ({ roomState, playerId }) => {
+  myPlayerId   = playerId;
+  myRoomCode   = roomState.code;
+  myTeamName   = roomState.players[playerId]?.teamName || null;
+  myPlayerName = roomState.players[playerId]?.name || null;
+  isSpectator  = roomState.players[playerId]?.status === 'spectating';
+  savePlayerData();
+
+  updateRoomCodeBadges(roomState.code);
+  showToast('¡Reconectado!', 'success');
+
+  // Navigate to the correct screen based on game state
+  navigateToGameState(roomState);
+});
+
+// Reconnection failed
+socket.on('reconnect_failed', ({ reason }) => {
+  clearRoomData();
+  showToast('No se pudo reconectar. La sala ya no existe.', 'error');
+  showScreen('screen-home');
+});
+
+// Host changed (host disconnected and was delegated)
+socket.on('host_changed', ({ newHostName, newHostId }) => {
+  showToast(`👑 ${newHostName} es ahora el anfitrión`, 'info');
+});
+
+// A spectator joined the room
+socket.on('spectator_joined', ({ playerName, teamName }) => {
+  showToast(`${playerName} se unió como espectador (${teamName})`, 'info');
+});
+
+// A spectator was activated (can now play)
+socket.on('spectator_activated', ({ playerName }) => {
+  if (playerName === myPlayerName) {
+    isSpectator = false;
+    showToast('¡Ya puedes jugar!', 'success');
+  }
+});
+
+// Update all room code badge elements throughout the UI
+function updateRoomCodeBadges(roomCode) {
+  const code = roomCode || myRoomCode || '------';
+  const badgeIds = [
+    'room-badge-waiting',
+    'room-badge-describer',
+    'room-badge-observer',
+    'room-badge-ended',
+    'room-badge-gameover'
+  ];
+  badgeIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = code;
+  });
+}
+
+// Navigate to the correct screen based on current game state
+function navigateToGameState(roomState) {
+  document.getElementById('lobby-room-code').textContent = roomState.code;
+  updateRoomCodeBadges(roomState.code);
+
+  if (roomState.state === 'lobby') {
+    renderLobby(roomState);
+    showScreen('screen-lobby');
+  } else if (roomState.state === 'game_over') {
+    showScreen('screen-game-over');
+  } else if (roomState.state === 'playing') {
+    currentScores = roomState.scores || {};
+
+    // Determine current describer from room state
+    const activeTeamName = roomState.teamOrder[roomState.activeTeamIndex];
+    const activeTeam = roomState.teams[activeTeamName];
+    const describerPlayerId = activeTeam?.memberIds[activeTeam.describerIndex] || null;
+    const describerPlayer = describerPlayerId ? roomState.players[describerPlayerId] : null;
+    const describerName = describerPlayer?.name || '—';
+
+    // Determine this player's role
+    if (myPlayerId === describerPlayerId) {
+      myRole = 'describer';
+    } else if (myTeamName === activeTeamName) {
+      myRole = 'guesser';
+    } else {
+      myRole = 'buzzer';
+    }
+
+    // Handle based on turn phase
+    if (roomState.turnPhase === 'waiting_for_describer') {
+      // Set up the waiting screen UI
+      document.getElementById('wfd-active-team').textContent = activeTeamName;
+      document.getElementById('wfd-describer-name').textContent = describerName;
+      document.getElementById('wfd-describer-name-2').textContent = describerName;
+
+      const readyBtn   = document.getElementById('btn-describer-ready');
+      const waitingMsg = document.getElementById('wfd-wait-msg');
+
+      if (myRole === 'describer') {
+        readyBtn.classList.remove('hidden');
+        waitingMsg.classList.add('hidden');
+      } else {
+        readyBtn.classList.add('hidden');
+        waitingMsg.classList.remove('hidden');
+      }
+
+      renderScores(currentScores, activeTeamName);
+      showScreen('screen-waiting-describer');
+    } else if (roomState.turnPhase === 'turn_active') {
+      // Player reconnected during active turn - show observer screen
+      // They'll need to wait for the next turn to participate properly
+      updatePlayerInfo();
+      showScreen('screen-turn-observer');
+    } else {
+      // Default: show waiting screen
+      showScreen('screen-waiting-describer');
+    }
+  }
+}
 
 // Another player joined or left; refresh the lobby view
 // Also handles returning to lobby after "play again"
@@ -80,6 +224,7 @@ socket.on('room_updated', ({ roomState }) => {
   // If we're back in lobby state (e.g., after play_again), navigate to lobby screen
   if (roomState.state === 'lobby') {
     document.getElementById('lobby-room-code').textContent = roomState.code;
+    updateRoomCodeBadges(roomState.code);
     renderLobby(roomState);
     showScreen('screen-lobby');
   } else {
@@ -675,3 +820,40 @@ if (!localStorage.getItem(TUTORIAL_SEEN_KEY)) {
   // Small delay to ensure page is fully loaded
   setTimeout(showTutorial, 300);
 }
+
+// ── 8. AUTO-RECONNECTION ──────────────────────────────────────
+
+// Pre-fill player name from localStorage
+if (myPlayerName) {
+  document.getElementById('player-name').value = myPlayerName;
+}
+
+// Save player name when it changes
+document.getElementById('player-name').addEventListener('change', (e) => {
+  myPlayerName = e.target.value.trim();
+  if (myPlayerName) {
+    localStorage.setItem('taboo_player_name', myPlayerName);
+  }
+});
+
+// Attempt to reconnect to a room if we have stored room data
+function attemptReconnect() {
+  const storedRoomCode = localStorage.getItem('taboo_room_code');
+  const storedPlayerId = localStorage.getItem('taboo_player_id');
+  const storedPlayerName = localStorage.getItem('taboo_player_name');
+
+  if (storedRoomCode && storedPlayerId && storedPlayerName) {
+    console.log(`Attempting to reconnect to room ${storedRoomCode}...`);
+    socket.emit('reconnect_room', {
+      roomCode: storedRoomCode,
+      playerId: storedPlayerId,
+      playerName: storedPlayerName
+    });
+  }
+}
+
+// On socket connect, attempt to reconnect to previous room
+socket.on('connect', () => {
+  // Small delay to let the socket stabilize
+  setTimeout(attemptReconnect, 100);
+});

@@ -16,8 +16,10 @@ class GameRoom {
     this.state       = 'lobby';   // 'lobby' | 'playing' | 'game_over'
     this.turnPhase   = null;      // 'waiting_for_describer' | 'turn_active' | 'turn_ended'
 
-    // players: { playerId -> { id, name, teamName, socketId, isHost } }
+    // players: { playerId -> { id, name, teamName, socketId, isHost, status, joinOrder } }
+    // status: 'active' | 'spectating' (spectating = joined mid-game, waiting for next round)
     this.players = {};
+    this.nextJoinOrder = 0;  // Counter for tracking join order (for host delegation)
 
     // teams: Fixed teams created upfront (Equipo A, Equipo B)
     // { teamName -> { name, score, memberIds: [], describerIndex: 0 } }
@@ -55,33 +57,102 @@ class GameRoom {
     this.reconnectTimers = {};
 
     // Add the host to Equipo A (first team)
+    // Note: Host is always active, never a spectator
     this.addPlayer(hostSocketId, hostPlayerId, hostPlayerName, config.TEAM_NAMES[0], true);
+  }
+
+  // Get list of spectators (players waiting to join)
+  getSpectators() {
+    return Object.values(this.players).filter(p => p.status === 'spectating');
+  }
+
+  // Activate all spectators — call this at the start of a new turn (waiting_for_describer)
+  // Returns array of activated player names
+  activateSpectators() {
+    const activated = [];
+    for (const player of Object.values(this.players)) {
+      if (player.status === 'spectating') {
+        player.status = 'active';
+        const team = this.teams[player.teamName];
+        if (team && !team.memberIds.includes(player.id)) {
+          team.memberIds.push(player.id);
+        }
+        activated.push(player.name);
+      }
+    }
+    return activated;
+  }
+
+  // Delegate host to the next oldest player (by joinOrder)
+  // Returns the new host's player object, or null if no other players
+  delegateHost() {
+    const currentHostId = this.hostPlayerId;
+    const candidates = Object.values(this.players)
+      .filter(p => p.id !== currentHostId && p.status === 'active')
+      .sort((a, b) => a.joinOrder - b.joinOrder);
+
+    if (candidates.length === 0) {
+      // No active players to delegate to, try spectators
+      const spectators = Object.values(this.players)
+        .filter(p => p.id !== currentHostId)
+        .sort((a, b) => a.joinOrder - b.joinOrder);
+      if (spectators.length === 0) return null;
+      candidates.push(spectators[0]);
+    }
+
+    const newHost = candidates[0];
+
+    // Remove host status from current host if they still exist
+    if (this.players[currentHostId]) {
+      this.players[currentHostId].isHost = false;
+    }
+
+    // Assign host to new player
+    newHost.isHost = true;
+    this.hostPlayerId = newHost.id;
+
+    return newHost;
   }
 
   // ── PLAYER MANAGEMENT ────────────────────────────────────────
 
-  // Returns null on success, or an error code string on failure
+  // Returns { error } on failure, or { isSpectator } on success
   addPlayer(socketId, playerId, name, teamName, isHost = false) {
     // Validate team name is one of the fixed teams
     if (!config.TEAM_NAMES.includes(teamName)) {
-      return 'INVALID_TEAM';
+      return { error: 'INVALID_TEAM' };
     }
 
     // Validate team is not full
     const team = this.teams[teamName];
     if (team.memberIds.length >= config.MAX_PLAYERS_PER_TEAM) {
-      return 'TEAM_FULL';
+      return { error: 'TEAM_FULL' };
     }
 
-    this.players[playerId] = { id: playerId, name, teamName, socketId, isHost };
+    // Determine if player joins as spectator (game already in progress)
+    const isSpectator = this.state === 'playing';
+
+    this.players[playerId] = {
+      id: playerId,
+      name,
+      teamName,
+      socketId,
+      isHost,
+      status: isSpectator ? 'spectating' : 'active',
+      joinOrder: this.nextJoinOrder++
+    };
     this.playerStats[playerId] = { described: 0, guessed: 0 };
 
+    // Only add to team's active members if not spectating
+    // Spectators are tracked in players but don't participate in rotation until activated
     if (!team.memberIds.includes(playerId)) {
-      team.memberIds.push(playerId);
+      if (!isSpectator) {
+        team.memberIds.push(playerId);
+      }
     }
 
     this.lastActivityAt = Date.now();
-    return null; // Success
+    return { isSpectator }; // Success
   }
 
   removePlayer(playerId) {
@@ -299,7 +370,7 @@ class GameRoom {
   }
 
   // Called when the turn timer expires — advance to next team
-  // Returns: { scores, teamStats, nextTeam, nextDescriberName }
+  // Returns: { scores, teamStats, nextTeam, nextDescriberName, activatedSpectators }
   endTurn() {
     this.turnPhase   = 'turn_ended';
     this.currentCard = null;
@@ -307,11 +378,16 @@ class GameRoom {
 
     // Advance describer rotation within the active team
     const activeTeam = this._getActiveTeam();
-    activeTeam.describerIndex = (activeTeam.describerIndex + 1) % activeTeam.memberIds.length;
+    if (activeTeam.memberIds.length > 0) {
+      activeTeam.describerIndex = (activeTeam.describerIndex + 1) % activeTeam.memberIds.length;
+    }
 
     // Advance to the next team
     this.activeTeamIndex = (this.activeTeamIndex + 1) % this.teamOrder.length;
     this.turnNumber++;
+
+    // Activate any spectators waiting to join
+    const activatedSpectators = this.activateSpectators();
 
     const nextTeam     = this.teamOrder[this.activeTeamIndex];
     const nextDescName = this._getDescriberName(nextTeam);
@@ -324,6 +400,7 @@ class GameRoom {
       teamStats:         this._buildTeamStats(),
       nextTeam,
       nextDescriberName: nextDescName,
+      activatedSpectators,
     };
   }
 
@@ -336,6 +413,9 @@ class GameRoom {
     this.currentCard = null;
     this.turnNumber  = 0;
     this.activeTeamIndex = 0;
+
+    // Activate any remaining spectators
+    this.activateSpectators();
 
     Object.values(this.teams).forEach(t => { t.score = 0; t.describerIndex = 0; });
     Object.keys(this.playerStats).forEach(id => { this.playerStats[id] = { described: 0, guessed: 0 }; });
@@ -359,7 +439,13 @@ class GameRoom {
       activeTeamIndex: this.activeTeamIndex,
       turnNumber:   this.turnNumber,
       secondsRemaining: this.secondsRemaining,
+      hostPlayerId: this.hostPlayerId,
     };
+  }
+
+  // Check if a player exists and was previously in this room
+  hasPlayer(playerId) {
+    return !!this.players[playerId];
   }
 
   isEmpty() { return Object.keys(this.players).length === 0; }

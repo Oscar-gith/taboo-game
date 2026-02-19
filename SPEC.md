@@ -122,7 +122,10 @@ create_room      { playerName }
                  // Host is auto-assigned to "Equipo A"
 join_room        { roomCode, playerName, teamName }
                  // teamName must be "Equipo A" or "Equipo B"
+                 // If game in progress: player joins as spectator
                  // Server rejects if chosen team is full (6 players)
+reconnect_room   { roomCode, playerId, playerName }
+                 // Attempt to rejoin a room after disconnect/refresh
 start_game       { roomCode }                    [host only]
 describer_ready  { roomCode }                    [describer only]
 card_correct     { roomCode, cardId }            [active team only]
@@ -149,6 +152,11 @@ game_over        { finalScores, teamStats, playerStats, winner }    → all
 error            { code, message }                        → requesting player
 cards_generating { }                                      → all players in room
 cards_ready      { totalCards }                           → all players in room
+reconnect_success { roomState }                           → reconnecting player
+reconnect_failed  { reason }                              → reconnecting player
+host_changed      { newHostName, newHostId }              → all players in room
+spectator_joined  { playerName, teamName }                → all players in room
+spectator_activated { playerName }                        → all players in room
 ```
 
 ---
@@ -218,12 +226,54 @@ An interactive tutorial explains the game rules to new players.
 
 ---
 
-## Reconnection Behavior
+## Reconnection & Persistence
 
-- Each player has a persistent `playerId` (UUID) stored in `sessionStorage`
-- If a player disconnects during their **describer turn**, their turn ends immediately
+### Player Session Storage
+
+Player data is persisted in `localStorage` (survives browser refresh):
+```javascript
+{
+  taboo_player_id: "uuid",
+  taboo_player_name: "María",
+  taboo_room_code: "XTBK92"  // null if not in a room
+}
+```
+
+### Auto-Reconnection Flow
+
+1. On page load, client checks for `taboo_room_code` in localStorage
+2. If exists, sends `reconnect_room { roomCode, playerId, playerName }`
+3. Server validates: room exists AND player was in it
+4. If valid: player rejoins their team, receives current game state
+5. If invalid: client clears localStorage, shows home screen
+
+### Disconnection Handling
+
 - Player has **60 seconds** to reconnect before being removed from the room
-- On reconnect: player rejoins their team; play resumes on the next turn
+- If describer disconnects during their turn: turn ends immediately, play continues
+- If host disconnects: host role auto-delegates to next oldest player in room
+- Socket.io emits `host_changed { newHostName, newHostId }` to all players
+
+### Late Joining (Spectators)
+
+Players can join a room even if a game is already in progress:
+- Late joiners enter as **spectators** with `status: 'spectating'`
+- Spectators see the scoreboard and game progress but cannot participate
+- When the current round ends (at `WAITING_FOR_DESCRIBER`), spectators become active players
+- UI shows spectators with "(Esperando)" badge in lobby/team list
+
+---
+
+## Room Code Visibility
+
+The room code remains visible throughout the entire game session:
+- Shown in lobby header (existing)
+- Shown as a small badge on all game screens:
+  - `#screen-waiting-describer`
+  - `#screen-turn-describer`
+  - `#screen-turn-observer`
+  - `#screen-turn-ended`
+  - `#screen-game-over`
 
 ---
 
@@ -231,9 +281,8 @@ An interactive tutorial explains the game rules to new players.
 
 | Code | When |
 |---|---|
-| `ROOM_NOT_FOUND` | `join_room` with invalid code |
-| `GAME_ALREADY_STARTED` | `join_room` after game began |
-| `TEAM_FULL` | `join_room` when selected team has 6 players |
+| `ROOM_NOT_FOUND` | `join_room` or `reconnect_room` with invalid code |
+| `TEAM_FULL` | `join_room` when selected team has 6 players (including spectators) |
 | `INVALID_TEAM` | `join_room` with team name other than "Equipo A"/"Equipo B" |
 | `NOT_YOUR_TURN` | Attempting an action when it's not your turn |
 | `NOT_HOST` | Non-host attempts `start_game` |
@@ -279,5 +328,4 @@ Shows (ranked by score):
 - Custom card creation by players
 - Card reporting or moderation
 - Mobile native app (web only, mobile-responsive)
-- Spectator mode
 - Private team chat for guessers
