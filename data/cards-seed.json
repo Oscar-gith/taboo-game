@@ -1012,5 +1012,694 @@
     ],
     "category": "naturaleza",
     "difficulty": "easy"
+  },
+  {
+    "id": "22a531d8-c921-4920-922e-6c2cfc066519",
+    "word": "TERMINATOR",
+    "tabooWords": [
+      "cyborg",
+      "robot",
+      "arnold",
+      "futuro",
+      "máquina"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "easy"
+  },
+  {
+    "id": "23892628-0b8e-492e-97fa-2109a7f8deb1",
+    "word": "MATRIX",
+    "tabooWords": [
+      "neo",
+      "balas",
+      "esquivar",
+      "realidad",
+      "simulación"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "0f95e36a-94ae-4fe7-b9d2-dce8c378e915",
+    "word": "MISIÓN IMPOSIBLE",
+    "tabooWords": [
+      "ethan",
+      "hunt",
+      "tom cruise",
+      "imposible",
+      "secreta"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "easy"
+  },
+  {
+    "id": "d68bbdc1-3ef6-428e-a0f5-05c10e342c23",
+    "word": "A TODO GAS",
+    "tabooWords": [
+      "coche",
+      "carreras",
+      "diesel",
+      "velocidad",
+      "toretto"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "9193bb76-4c2b-4a24-8f31-08e708c8eb02",
+    "word": "LEON",
+    "tabooWords": [
+      "profesional",
+      "asesino",
+      "mathilda",
+      "luc besson",
+      "contrato"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "hard"
+  },
+  {
+    "id": "2b75a77c-6b8c-48d7-a885-89fe749f8244",
+    "word": "JURASSIC PARK",
+    "tabooWords": [
+      "dinosaurios",
+      "isla",
+      "parque",
+      "t-rex",
+      "spielberg"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ced44da6-a8ff-4ed0-ba0b-923321085a9e",
+    "word": "SPEED",
+    "tabooWords": [
+      "autobús",
+      "bomba",
+      "keanu reeves",
+      "velocidad",
+      "los angeles"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "4226c5b5-e2f3-4218-885a-240034d79fbe",
+    "word": "FACE/OFF",
+    "tabooWords": [
+      "cara",
+      "nicolas cage",
+      "travolta",
+      "intercambio",
+      "identidad"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "13823910-9382-41a7-8556-b22fd266a7e8",
+    "word": "DESAFÍO TOTAL",
+    "tabooWords": [
+      "marte",
+      "arnold schwarzenegger",
+      "mutantes",
+      "memoria",
+      "futuro"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "hard"
+  },
+  {
+    "id": "1684d0c4-3a90-4294-b942-ec990e16acfa",
+    "word": "EL QUINTO ELEMENTO",
+    "tabooWords": [
+      "milla jovovich",
+      "taxi",
+      "futuro",
+      "elementos",
+      "luc besson"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "a523ff5b-0f24-4290-b595-d6aa2f91f5c5",
+    "word": "TITANIC",
+    "tabooWords": [
+      "barco",
+      "iceberg",
+      "hundimiento",
+      "leonardo dicaprio",
+      "kate winslet"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "easy"
+  },
+  {
+    "id": "a421fdb8-c333-4c5a-bd27-3ecc5029759d",
+    "word": "INDEPENDENCE DAY",
+    "tabooWords": [
+      "aliens",
+      "will smith",
+      "invasión",
+      "estados unidos",
+      "destrucción"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "easy"
+  },
+  {
+    "id": "967197be-ed82-47b3-a76a-a8070447ff71",
+    "word": "CON AIR",
+    "tabooWords": [
+      "avión",
+      "presos",
+      "nicolas cage",
+      "secuestro",
+      "explosiones"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "2ab23d53-00b3-40b7-9640-bcfbfdb7630b",
+    "word": "HEAT",
+    "tabooWords": [
+      "pacino",
+      "de niro",
+      "ladrones",
+      "policías",
+      "atracos"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "7772dc7f-636e-4a69-92ea-618f510715f6",
+    "word": "BRAVEHEART",
+    "tabooWords": [
+      "mel gibson",
+      "escocia",
+      "libertad",
+      "batalla",
+      "william wallace"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "hard"
+  },
+  {
+    "id": "8eb8c5b1-c71d-4471-8644-671e21623ea4",
+    "word": "GODZILLA",
+    "tabooWords": [
+      "monstruo",
+      "japon",
+      "destrucción",
+      "toho",
+      "nuclear"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "easy"
+  },
+  {
+    "id": "0421b25f-9383-4e73-ab59-f774b3f60449",
+    "word": "LA ROCA",
+    "tabooWords": [
+      "alcatraz",
+      "químico",
+      "nicolas cage",
+      "conex",
+      "misiles"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "3ac09a94-5b5b-4b2b-b614-4194ddfea8d1",
+    "word": "AIR FORCE ONE",
+    "tabooWords": [
+      "avión",
+      "presidente",
+      "terroristas",
+      "secuestro",
+      "harrison ford"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "392a0da0-1bc5-47af-938d-24cc4bef926c",
+    "word": "STARGATE",
+    "tabooWords": [
+      "puerta",
+      "egipto",
+      "ra",
+      "kurt russell",
+      "aliens"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "hard"
+  },
+  {
+    "id": "e07bc3ab-4e1e-4fd9-ba9a-94f74e6c3995",
+    "word": "SOLDADO UNIVERSAL",
+    "tabooWords": [
+      "van damme",
+      "lundgren",
+      "soldados",
+      "revividos",
+      "guerra"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "45f93389-76e8-40fa-8ccd-006904b4f910",
+    "word": "SIN ESCAPE",
+    "tabooWords": [
+      "isla",
+      "ray liotta",
+      "prisión",
+      "futuro",
+      "juego"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "hard"
+  },
+  {
+    "id": "4b52d8bb-7372-4df6-9114-a5af4d6ebdae",
+    "word": "TRUE LIES",
+    "tabooWords": [
+      "espía",
+      "arnold schwarzenegger",
+      "jamie lee curtis",
+      "terroristas",
+      "boda"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "medium"
+  },
+  {
+    "id": "f6197f2a-1a8c-4ef0-99c9-8f3dd754cf7a",
+    "word": "DRAGONHEART",
+    "tabooWords": [
+      "dragón",
+      "sean connery",
+      "caballero",
+      "medieval",
+      "corazón"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "hard"
+  },
+  {
+    "id": "1089b3ef-c324-4e10-9b72-0974523da034",
+    "word": "ARMAGEDDON",
+    "tabooWords": [
+      "asteroide",
+      "nasa",
+      "bruce willis",
+      "tierra",
+      "espacio"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "easy"
+  },
+  {
+    "id": "fa28720d-d100-443f-9530-e11294a1ca41",
+    "word": "MEN IN BLACK",
+    "tabooWords": [
+      "will smith",
+      "tommy lee jones",
+      "aliens",
+      "agentes",
+      "gafas"
+    ],
+    "category": "películas de acción 90s",
+    "difficulty": "easy"
+  },
+  {
+    "id": "b64b9984-938a-46ac-ac12-9fca5be21e20",
+    "word": "TELÉFONO MÓVIL",
+    "tabooWords": [
+      "celular",
+      "smartphone",
+      "llamar",
+      "pantalla",
+      "whatsapp"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "be503c9e-b54a-4d1a-8a72-2b550faf789d",
+    "word": "REDES SOCIALES",
+    "tabooWords": [
+      "facebook",
+      "instagram",
+      "twitter",
+      "internet",
+      "conectar"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "3d8c602c-f13a-4aba-8a48-132a69b26c45",
+    "word": "ORDENADOR PORTÁTIL",
+    "tabooWords": [
+      "laptop",
+      "pc",
+      "teclado",
+      "ratón",
+      "batería"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "6edfdcfb-89eb-4fcd-a71f-6873295305fa",
+    "word": "INTELIGENCIA ARTIFICIAL",
+    "tabooWords": [
+      "ia",
+      "robot",
+      "aprender",
+      "máquina",
+      "futuro"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "medium"
+  },
+  {
+    "id": "eb7c1f17-72e0-4d9d-a9a5-82283f7973a5",
+    "word": "REALIDAD VIRTUAL",
+    "tabooWords": [
+      "gafas",
+      "simulación",
+      "inmersión",
+      "juego",
+      "metaverso"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "medium"
+  },
+  {
+    "id": "e9dc3ac3-0b3f-40b9-afd9-da6d8184e4db",
+    "word": "VIDEOJUEGO",
+    "tabooWords": [
+      "consola",
+      "playstation",
+      "nintendo",
+      "xbox",
+      "ordenador"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "c78f4e19-18e6-437f-ae8d-51b389a3cbe4",
+    "word": "IMPRESORA 3D",
+    "tabooWords": [
+      "tres dimensiones",
+      "crear",
+      "plástico",
+      "objeto",
+      "prototipo"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "hard"
+  },
+  {
+    "id": "9d405b2c-a108-4f1a-88a0-2488bc403894",
+    "word": "CRIPTOMONEDA",
+    "tabooWords": [
+      "bitcoin",
+      "blockchain",
+      "dinero",
+      "virtual",
+      "inversión"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "hard"
+  },
+  {
+    "id": "2928cc03-1513-45c3-9086-1f111a35573c",
+    "word": "ALGORITMO",
+    "tabooWords": [
+      "código",
+      "programación",
+      "ordenador",
+      "matemáticas",
+      "instrucciones"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "hard"
+  },
+  {
+    "id": "6d056986-995e-4b4c-8eff-1b2bac28cbc9",
+    "word": "ROUTER",
+    "tabooWords": [
+      "wifi",
+      "internet",
+      "conectar",
+      "inalámbrico",
+      "red"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "19396bb5-a32e-4bc1-b7bd-bf867ed8c6e5",
+    "word": "APLICACIÓN",
+    "tabooWords": [
+      "app",
+      "móvil",
+      "descargar",
+      "programa",
+      "teléfono"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "bfd5dfa1-9541-4aed-b520-109b17ced881",
+    "word": "BASE DE DATOS",
+    "tabooWords": [
+      "información",
+      "almacenar",
+      "ordenador",
+      "datos",
+      "tabla"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "medium"
+  },
+  {
+    "id": "7ae7f96a-ee32-4ae9-998f-f72307f8ee91",
+    "word": "MEMORIA USB",
+    "tabooWords": [
+      "pendrive",
+      "almacenamiento",
+      "portátil",
+      "datos",
+      "información"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "0318fb41-1f76-4eaa-bdc6-9fbbf39b018a",
+    "word": "COMERCIO ELECTRÓNICO",
+    "tabooWords": [
+      "online",
+      "internet",
+      "comprar",
+      "vender",
+      "amazon"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ed96fa5e-a063-4649-9ba0-7ca425ce7b14",
+    "word": "GPS",
+    "tabooWords": [
+      "satélite",
+      "ubicación",
+      "mapa",
+      "navegador",
+      "geolocalización"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "medium"
+  },
+  {
+    "id": "475569ae-e634-4e92-a418-b474db4f6ddf",
+    "word": "STREAMING",
+    "tabooWords": [
+      "vídeo",
+      "directo",
+      "online",
+      "netflix",
+      "youtube"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "84064ec0-c25f-4ef7-8555-271eaa478eb4",
+    "word": "SERVIDOR",
+    "tabooWords": [
+      "internet",
+      "web",
+      "almacenar",
+      "ordenador",
+      "red"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "medium"
+  },
+  {
+    "id": "1ef81210-6f6a-4f12-a589-29b21a7233a7",
+    "word": "CLOUD COMPUTING",
+    "tabooWords": [
+      "nube",
+      "internet",
+      "almacenar",
+      "datos",
+      "google"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "hard"
+  },
+  {
+    "id": "d9db9c29-18bd-4f02-a3c7-63bef43e10a8",
+    "word": "PANTALLA TÁCTIL",
+    "tabooWords": [
+      "dedo",
+      "móvil",
+      "teclado",
+      "ordenador",
+      "tocar"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "8018063c-6cd3-48ac-ab3e-13f1866298f6",
+    "word": "PODCAST",
+    "tabooWords": [
+      "audio",
+      "spotify",
+      "programa",
+      "escuchar",
+      "internet"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "medium"
+  },
+  {
+    "id": "f7f09861-b129-4dc6-a82c-aa55d4be32da",
+    "word": "SOFTWARE",
+    "tabooWords": [
+      "programa",
+      "ordenador",
+      "aplicación",
+      "sistema",
+      "windows"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "44b3e7ec-4365-42c7-b9eb-2823fc3201dd",
+    "word": "CIBERSEGURIDAD",
+    "tabooWords": [
+      "internet",
+      "virus",
+      "protección",
+      "ordenador",
+      "datos"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "medium"
+  },
+  {
+    "id": "3024e5b4-d4bc-4136-ba62-4025c07ad2b7",
+    "word": "WEBCAM",
+    "tabooWords": [
+      "cámara",
+      "ordenador",
+      "vídeo",
+      "streaming",
+      "skype"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "7479430d-a87a-4deb-84cb-4028c8de1e61",
+    "word": "SMARTWATCH",
+    "tabooWords": [
+      "reloj",
+      "inteligente",
+      "móvil",
+      "notificaciones",
+      "pulsera"
+    ],
+    "category": "tecnología moderna",
+    "difficulty": "easy"
+  },
+  {
+    "id": "2d97e1f4-a43b-4ac0-99d8-bc6bf9929074",
+    "word": "MUSEO",
+    "tabooWords": [
+      "arte",
+      "cuadros",
+      "historia",
+      "exposición",
+      "cultura"
+    ],
+    "category": "cultura",
+    "difficulty": "easy"
+  },
+  {
+    "id": "a3473229-53fc-4350-bfa8-2cf6bf1e04c7",
+    "word": "ECOSISTEMA",
+    "tabooWords": [
+      "biología",
+      "hábitat",
+      "fauna",
+      "flora",
+      "medioambiente"
+    ],
+    "category": "naturaleza",
+    "difficulty": "hard"
+  },
+  {
+    "id": "caadc0f8-7c7c-4aa4-9f68-439490dc8186",
+    "word": "CINEMATOGRAFÍA",
+    "tabooWords": [
+      "película",
+      "cámara",
+      "rodaje",
+      "guion",
+      "arte"
+    ],
+    "category": "cultura",
+    "difficulty": "hard"
+  },
+  {
+    "id": "b33813ee-5217-40e4-8d1b-33bd7ffd6ac9",
+    "word": "ESTEPA",
+    "tabooWords": [
+      "llanura",
+      "árboles",
+      "asia",
+      "hierba",
+      "clima"
+    ],
+    "category": "geografía",
+    "difficulty": "hard"
   }
 ]
