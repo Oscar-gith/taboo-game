@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Taboo en Línea</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       SCREEN 1: HOME — Join or create a room
+       ============================================================ -->
+  <div id="screen-home" class="screen active">
+    <header class="game-header">
+      <h1 class="logo">TABOO</h1>
+      <p class="subtitle">en línea · en español</p>
+    </header>
+
+    <main class="card-panel">
+      <div class="field-group">
+        <label for="player-name">Tu nombre</label>
+        <input id="player-name" type="text" placeholder="Ej: María" maxlength="20" autocomplete="off">
+      </div>
+
+      <button id="btn-create-room" class="btn btn-primary btn-large">
+        Crear sala nueva
+      </button>
+      <p class="hint" style="text-align:center; margin-top:0.5rem;">Serás asignado al Equipo A</p>
+
+      <div class="divider">— o —</div>
+
+      <div class="field-group">
+        <label for="room-code-input">Código de sala</label>
+        <input id="room-code-input" type="text" placeholder="Ej: XTBK92" maxlength="6"
+               autocomplete="off" autocapitalize="characters" style="text-transform:uppercase">
+      </div>
+
+      <div class="field-group">
+        <label>Elige tu equipo</label>
+        <div class="team-selector">
+          <label class="team-option">
+            <input type="radio" name="team-choice" value="Equipo A" checked>
+            <span class="team-label team-a">Equipo A</span>
+          </label>
+          <label class="team-option">
+            <input type="radio" name="team-choice" value="Equipo B">
+            <span class="team-label team-b">Equipo B</span>
+          </label>
+        </div>
+      </div>
+
+      <button id="btn-join-room" class="btn btn-secondary btn-large">
+        Unirse a sala
+      </button>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 2: LOBBY — Waiting for players to join
+       ============================================================ -->
+  <div id="screen-lobby" class="screen">
+    <header class="game-header">
+      <h2>Sala</h2>
+      <div class="room-code-display">
+        <span id="lobby-room-code">------</span>
+        <button id="btn-copy-code" class="btn btn-ghost btn-small" title="Copiar código">📋</button>
+      </div>
+      <p class="hint">Comparte este código con los otros jugadores</p>
+    </header>
+
+    <main class="card-panel">
+      <div id="team-list">
+        <!-- Populated by game.js: renderLobby() -->
+      </div>
+
+      <div id="lobby-status" class="status-message">Esperando jugadores...</div>
+
+      <button id="btn-start-game" class="btn btn-primary btn-large hidden">
+        ¡Iniciar juego!
+      </button>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 3: WAITING FOR DESCRIBER — Between turns
+       ============================================================ -->
+  <div id="screen-waiting-describer" class="screen">
+    <header class="game-header">
+      <div id="scores-waiting" class="scores-bar">
+        <!-- Populated by renderScores() -->
+      </div>
+    </header>
+
+    <main class="card-panel centered">
+      <div class="turn-info">
+        <p class="label">Turno del equipo</p>
+        <h2 id="wfd-active-team" class="team-name-display">—</h2>
+        <p id="wfd-describer-info" class="hint">
+          <span id="wfd-describer-name">—</span> va a describir
+        </p>
+      </div>
+
+      <button id="btn-describer-ready" class="btn btn-primary btn-large hidden">
+        ¡Estoy listo! →
+      </button>
+
+      <p id="wfd-wait-msg" class="hint hidden">
+        Esperando a que <span id="wfd-describer-name-2">—</span> esté listo...
+      </p>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 4: TURN ACTIVE (DESCRIBER VIEW)
+       ============================================================ -->
+  <div id="screen-turn-describer" class="screen">
+    <header class="turn-header">
+      <div id="timer-describer" class="timer">60</div>
+      <div id="scores-describer" class="scores-bar-compact">
+        <!-- Populated by renderScores() -->
+      </div>
+      <div id="player-info-describer" class="player-info">
+        <img id="avatar-describer" class="player-avatar" src="" alt="">
+        <span id="player-name-describer">—</span>
+        <span class="role-badge describer">Describiendo</span>
+      </div>
+    </header>
+
+    <main class="card-panel">
+      <div id="card-display" class="taboo-card">
+        <h2 id="card-word" class="main-word">CARGANDO...</h2>
+        <ul id="taboo-words-list" class="taboo-list">
+          <!-- <li>palabra</li> x5 -->
+        </ul>
+      </div>
+
+      <div class="action-buttons">
+        <button id="btn-correct" class="btn btn-correct">
+          ✓ Correcto <span class="points-badge">+1</span>
+        </button>
+        <button id="btn-skip" class="btn btn-skip">
+          → Pasar <span class="points-badge neutral">0</span>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 5: TURN ACTIVE (GUESSER / BUZZER VIEW)
+       ============================================================ -->
+  <div id="screen-turn-observer" class="screen">
+    <header class="turn-header">
+      <div id="timer-observer" class="timer">60</div>
+      <div id="scores-observer" class="scores-bar-compact">
+        <!-- Populated by renderScores() -->
+      </div>
+      <div id="player-info-observer" class="player-info">
+        <img id="avatar-observer" class="player-avatar" src="" alt="">
+        <span id="player-name-observer">—</span>
+        <span id="role-badge-observer" class="role-badge">—</span>
+      </div>
+    </header>
+
+    <main class="card-panel centered">
+      <div class="observer-area">
+        <!-- Guesser view: can't see the card -->
+        <div class="card-back">
+          <p id="observer-guesser-msg" class="observer-label hidden">
+            🗣️ Adivina la palabra...
+          </p>
+          <p id="observer-buzzer-msg" class="observer-label hidden">
+            👂 Escucha las palabras tabú...
+          </p>
+        </div>
+
+        <!-- Buzzer view: can see the card to catch taboo words -->
+        <div id="buzzer-card-display" class="taboo-card buzzer-card hidden">
+          <h2 id="buzzer-card-word" class="main-word">—</h2>
+          <ul id="buzzer-taboo-words-list" class="taboo-list">
+            <!-- Taboo words shown here -->
+          </ul>
+        </div>
+
+        <!-- Only visible to opposing teams (buzzers) -->
+        <button id="btn-buzz" class="btn btn-buzz hidden">
+          ¡TABÚ! <span class="points-badge negative">−1</span>
+        </button>
+      </div>
+
+      <!-- Live feed of scored cards this turn -->
+      <div id="turn-live-feed" class="live-feed">
+        <!-- Cards scored/skipped this turn appear here as they happen -->
+      </div>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 6: TURN ENDED — Summary after timer runs out
+       ============================================================ -->
+  <div id="screen-turn-ended" class="screen">
+    <header class="game-header">
+      <h2>¡Tiempo!</h2>
+    </header>
+
+    <main class="card-panel">
+      <div id="turn-summary-scores" class="score-summary">
+        <!-- Team scores after this turn -->
+      </div>
+
+      <div id="turn-next-info" class="next-turn-info">
+        <p>Siguiente turno:</p>
+        <p><strong id="next-team-name">—</strong></p>
+        <p>Describe: <span id="next-describer-name">—</span></p>
+      </div>
+
+      <p class="hint countdown-hint">El juego continúa en un momento...</p>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 7: GAME OVER — Final scores and winner
+       ============================================================ -->
+  <div id="screen-game-over" class="screen">
+    <header class="game-header">
+      <h1 id="winner-banner" class="winner-text">¡Juego terminado!</h1>
+    </header>
+
+    <main class="card-panel">
+      <div id="final-podium" class="podium">
+        <!-- Ranked team scores: 1st, 2nd, 3rd... -->
+      </div>
+
+      <details class="stats-accordion">
+        <summary>Estadísticas individuales</summary>
+        <div id="player-stats">
+          <!-- Per-player: cards described + cards guessed -->
+        </div>
+      </details>
+
+      <button id="btn-play-again" class="btn btn-primary btn-large hidden">
+        Jugar de nuevo
+      </button>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       TOAST NOTIFICATIONS (overlaid on all screens)
+       ============================================================ -->
+  <div id="toast-container" aria-live="polite">
+    <!-- Toasts injected here by showToast() in game.js -->
+  </div>
+
+  <!-- Socket.io client library — served automatically by Socket.io server -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- All game logic -->
+  <script src="game.js"></script>
+</body>
+</html>

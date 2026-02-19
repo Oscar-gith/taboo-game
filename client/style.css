@@ -1,0 +1,630 @@
+/* ============================================================
+   TABOO GAME — Mobile-first styles
+   Default target: 360px wide phones (players use their own phones)
+   Breakpoint: 640px (tablets / desktop secondary)
+   ============================================================ */
+
+/* ── DESIGN TOKENS ── */
+:root {
+  --red:      #e63946;   /* Primary: urgency, taboo words, buzz button */
+  --blue:     #457b9d;   /* Secondary: join/create actions */
+  --green:    #2a9d8f;   /* Success: correct guesses */
+  --yellow:   #e9c46a;   /* Warning: skip */
+  --dark:     #1d3557;   /* Main text */
+  --medium:   #4a6080;   /* Secondary text, labels */
+  --light:    #a8c0d6;   /* Borders, dividers */
+  --bg:       #f1faee;   /* Page background */
+  --surface:  #ffffff;   /* Card/panel background */
+
+  --radius:   14px;
+  --shadow:   0 4px 20px rgba(29, 53, 87, 0.12);
+  --shadow-sm: 0 2px 8px rgba(29, 53, 87, 0.08);
+
+  --font:     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--dark);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SCREEN SYSTEM ── */
+/* Only the .active screen is visible */
+.screen {
+  display: none;
+  flex-direction: column;
+  min-height: 100dvh;        /* dvh: accounts for mobile browser chrome */
+  padding: 1rem;
+  max-width: 560px;
+  margin: 0 auto;
+  gap: 1rem;
+}
+.screen.active { display: flex; }
+
+/* ── UTILITY CLASSES ── */
+.hidden { display: none !important; }
+
+/* ── TYPOGRAPHY ── */
+h1 { font-size: 2.5rem; font-weight: 900; }
+h2 { font-size: 1.5rem; font-weight: 700; }
+h3 { font-size: 1.1rem; font-weight: 600; }
+.label  { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--medium); }
+.hint   { font-size: 0.9rem; color: var(--medium); text-align: center; }
+
+/* ── HEADER ── */
+.game-header {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+.logo {
+  color: var(--red);
+  letter-spacing: 0.15em;
+  font-size: 3.5rem;
+}
+.subtitle { color: var(--medium); font-size: 0.9rem; margin-top: -0.5rem; }
+
+/* ── CARD PANEL (white surface that holds content) ── */
+.card-panel {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+.card-panel.centered {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* ── FORM FIELDS ── */
+.field-group { display: flex; flex-direction: column; gap: 0.35rem; }
+.field-group label { font-size: 0.85rem; font-weight: 600; color: var(--medium); }
+input[type="text"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--light);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: var(--font);
+  color: var(--dark);
+  background: var(--bg);
+  transition: border-color 0.15s;
+  outline: none;
+}
+input[type="text"]:focus { border-color: var(--blue); }
+input[type="text"]::placeholder { color: var(--light); }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 52px;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, opacity 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+.btn.hidden { display: none !important; }
+
+.btn-large { min-height: 60px; font-size: 1.1rem; width: 100%; }
+.btn-small { min-height: 36px; padding: 0.4rem 0.75rem; font-size: 0.85rem; }
+
+.btn-primary   { background: var(--red);   color: white; box-shadow: 0 4px 12px rgba(230,57,70,0.3); }
+.btn-secondary { background: var(--blue);  color: white; box-shadow: 0 4px 12px rgba(69,123,157,0.3); }
+.btn-ghost     { background: transparent;  color: var(--medium); border: 2px solid var(--light); }
+.btn-correct   { background: var(--green); color: white; flex: 1; font-size: 1.1rem; box-shadow: 0 4px 12px rgba(42,157,143,0.3); }
+.btn-skip      { background: var(--yellow); color: var(--dark); flex: 1; font-size: 1.1rem; }
+.btn-buzz      {
+  background: var(--red);
+  color: white;
+  width: 100%;
+  min-height: 80px;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  box-shadow: 0 6px 20px rgba(230,57,70,0.4);
+  animation: buzz-pulse 2s ease-in-out infinite;
+}
+
+@keyframes buzz-pulse {
+  0%, 100% { box-shadow: 0 6px 20px rgba(230,57,70,0.4); }
+  50%       { box-shadow: 0 6px 30px rgba(230,57,70,0.7); }
+}
+
+/* ── POINTS BADGE (inside buttons) ── */
+.points-badge {
+  background: rgba(255,255,255,0.25);
+  border-radius: 6px;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+.points-badge.neutral  { background: rgba(0,0,0,0.1); }
+.points-badge.negative { background: rgba(255,255,255,0.25); }
+
+/* ── DIVIDER ── */
+.divider {
+  text-align: center;
+  color: var(--light);
+  font-size: 0.85rem;
+  position: relative;
+}
+
+/* ── ROOM CODE DISPLAY (lobby) ── */
+.room-code-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+.room-code-display span {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: var(--dark);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── TEAM LIST (lobby screen) ── */
+.team-block {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+}
+.team-block h3 { color: var(--dark); margin-bottom: 0.25rem; }
+.team-block .player-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--surface);
+  border: 1px solid var(--light);
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem 0.2rem 0.25rem;
+  font-size: 0.85rem;
+  margin: 0.15rem;
+}
+.team-block .player-chip.is-host::after {
+  content: ' 👑';
+}
+.player-avatar-small {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+.team-block .player-count {
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--medium);
+}
+.team-block.needs-players {
+  border: 2px dashed var(--light);
+}
+.team-block .team-hint {
+  font-size: 0.8rem;
+  color: var(--red);
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* ── SCORES BAR ── */
+.scores-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+.score-chip {
+  background: var(--surface);
+  border: 2px solid var(--light);
+  border-radius: 8px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.score-chip.active-team { border-color: var(--red); color: var(--red); }
+.score-chip .score-num  { font-size: 1.1rem; }
+
+.scores-bar-compact { /* Smaller version for during-turn display */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+/* ── TURN HEADER ── */
+.turn-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  gap: 0.75rem;
+}
+
+/* ── PLAYER INFO (shown during game) ── */
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--medium);
+  width: 100%;
+  justify-content: center;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--light);
+}
+.player-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--light);
+}
+.role-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: var(--light);
+  color: var(--dark);
+}
+.role-badge.describer {
+  background: var(--blue);
+  color: white;
+}
+.role-badge.guesser {
+  background: var(--green);
+  color: white;
+}
+.role-badge.buzzer {
+  background: var(--red);
+  color: white;
+}
+
+/* ── TIMER ── */
+.timer {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--dark);
+  font-variant-numeric: tabular-nums;
+  min-width: 3ch;
+  text-align: center;
+  transition: color 0.3s;
+}
+.timer.urgent {
+  color: var(--red);
+  animation: timer-pulse 0.5s ease-in-out infinite;
+}
+@keyframes timer-pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+
+/* ── TABOO CARD ── */
+.taboo-card {
+  background: var(--surface);
+  border: 3px solid var(--dark);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  box-shadow: var(--shadow);
+}
+.main-word {
+  font-size: clamp(2rem, 10vw, 3.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--dark);
+  line-height: 1.1;
+}
+.taboo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+  border-top: 2px solid var(--red);
+  padding-top: 0.75rem;
+  margin-top: 0.25rem;
+}
+.taboo-list li {
+  color: var(--red);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: line-through;
+  text-decoration-color: rgba(230,57,70,0.5);
+  text-transform: capitalize;
+}
+
+/* ── ACTION BUTTONS (describer turn) ── */
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* ── OBSERVER VIEW ── */
+.observer-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+.card-back {
+  background: var(--bg);
+  border: 3px dashed var(--light);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  width: 100%;
+}
+.observer-label {
+  font-size: 1.3rem;
+  color: var(--medium);
+}
+
+/* Buzzer card view (smaller than describer) */
+.buzzer-card {
+  max-width: 300px;
+  padding: 1rem;
+}
+.buzzer-card .main-word {
+  font-size: clamp(1.5rem, 6vw, 2rem);
+}
+.buzzer-card .taboo-list li {
+  font-size: 1rem;
+}
+
+/* ── LIVE FEED (during observer turn) ── */
+.live-feed {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.feed-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  animation: fade-in 0.2s ease;
+}
+.feed-item.correct  { background: rgba(42,157,143,0.12); color: var(--green); }
+.feed-item.buzz     { background: rgba(230,57,70,0.1);  color: var(--red); }
+.feed-item.skip     { background: rgba(233,196,106,0.15); color: #8a6d00; }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── TURN INFO (waiting screen) ── */
+.turn-info { text-align: center; }
+.team-name-display { font-size: 2rem; color: var(--red); margin: 0.25rem 0; }
+
+/* ── SCORE SUMMARY (turn ended) ── */
+.score-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  background: var(--bg);
+  border-radius: 10px;
+  font-weight: 600;
+}
+.score-row.leading { background: rgba(42,157,143,0.1); border-left: 4px solid var(--green); }
+.score-row .team-label { font-size: 1rem; }
+.score-row .team-score { font-size: 1.3rem; font-weight: 900; color: var(--dark); }
+
+/* ── NEXT TURN INFO ── */
+.next-turn-info {
+  text-align: center;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 1rem;
+  color: var(--medium);
+}
+.next-turn-info strong { color: var(--dark); font-size: 1.2rem; }
+
+/* ── GAME OVER PODIUM ── */
+.podium {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.podium-entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: var(--bg);
+}
+.podium-entry:first-child {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border: 2px solid #d4a800;
+  font-size: 1.1rem;
+}
+.podium-rank    { font-size: 1.5rem; min-width: 2rem; text-align: center; }
+.podium-team    { flex: 1; font-weight: 700; }
+.podium-score   { font-size: 1.5rem; font-weight: 900; color: var(--dark); }
+
+.winner-text { color: var(--red); font-size: 2rem; }
+
+/* ── STATS ACCORDION ── */
+.stats-accordion {
+  border: 2px solid var(--light);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+.stats-accordion summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--medium);
+  list-style: none;
+  user-select: none;
+}
+.stats-accordion summary::after { content: ' ▼'; font-size: 0.7rem; }
+.stats-accordion[open] summary::after { content: ' ▲'; }
+.stats-accordion #player-stats { margin-top: 0.75rem; }
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--bg);
+  font-size: 0.9rem;
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-player {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.stat-values {
+  font-size: 0.8rem;
+  color: var(--medium);
+}
+
+/* ── STATUS MESSAGE ── */
+.status-message {
+  text-align: center;
+  color: var(--medium);
+  font-size: 0.9rem;
+  padding: 0.5rem;
+}
+.countdown-hint { font-size: 0.85rem; animation: fade-blink 1.5s ease-in-out infinite; }
+@keyframes fade-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── TOAST NOTIFICATIONS ── */
+#toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  z-index: 1000;
+  pointer-events: none;
+  width: min(90vw, 400px);
+}
+.toast {
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  animation: toast-in 0.3s ease, toast-out 0.3s ease 2.7s forwards;
+  pointer-events: auto;
+}
+.toast.error   { background: var(--red); }
+.toast.success { background: var(--green); }
+.toast.warning { background: #cc8a00; }
+.toast.info    { background: var(--blue); }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes toast-out {
+  from { opacity: 1; }
+  to   { opacity: 0; pointer-events: none; }
+}
+
+/* ── TEAM SELECTOR (join room) ── */
+.team-selector {
+  display: flex;
+  gap: 0.75rem;
+}
+.team-option {
+  flex: 1;
+  cursor: pointer;
+}
+.team-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.team-label {
+  display: block;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--light);
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--medium);
+  background: var(--bg);
+  transition: all 0.15s ease;
+}
+.team-option input[type="radio"]:checked + .team-label {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: white;
+}
+.team-option input[type="radio"]:focus + .team-label {
+  box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.3);
+}
+.team-label.team-a { border-color: var(--blue); }
+.team-label.team-b { border-color: var(--red); }
+.team-option input[type="radio"]:checked + .team-label.team-b {
+  border-color: var(--red);
+  background: var(--red);
+}
+
+/* ── DESKTOP / TABLET ── */
+@media (min-width: 640px) {
+  .screen { padding: 2rem; }
+  .logo   { font-size: 4.5rem; }
+  .timer  { font-size: 4.5rem; }
+  .main-word { font-size: 4rem; }
+  .btn-buzz  { min-height: 100px; font-size: 2rem; }
+}

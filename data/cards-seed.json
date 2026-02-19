@@ -1,0 +1,1016 @@
+[
+  {
+    "id": "144eeeb0-0965-45df-aae4-de09ad3fa3da",
+    "word": "TELÉFONO",
+    "tabooWords": [
+      "llamar",
+      "móvil",
+      "comunicación",
+      "hablar",
+      "número"
+    ],
+    "category": "tecnología",
+    "difficulty": "easy"
+  },
+  {
+    "id": "b1fb0a26-78a1-449c-bf53-d058e611d423",
+    "word": "PIZZA",
+    "tabooWords": [
+      "italiana",
+      "queso",
+      "tomate",
+      "masa",
+      "horno"
+    ],
+    "category": "comida",
+    "difficulty": "easy"
+  },
+  {
+    "id": "bd647192-0184-4df3-92b2-dcbc93bfc742",
+    "word": "ÁRBOL",
+    "tabooWords": [
+      "hojas",
+      "madera",
+      "bosque",
+      "naturaleza",
+      "rama"
+    ],
+    "category": "naturaleza",
+    "difficulty": "easy"
+  },
+  {
+    "id": "9b5db6cc-0852-4074-9173-666cea2abbf4",
+    "word": "FÚTBOL",
+    "tabooWords": [
+      "gol",
+      "balón",
+      "deporte",
+      "equipo",
+      "partido"
+    ],
+    "category": "deportes",
+    "difficulty": "easy"
+  },
+  {
+    "id": "88346bb6-5dc6-4801-8547-6f4dd51dec4d",
+    "word": "MÚSICA",
+    "tabooWords": [
+      "sonido",
+      "canción",
+      "instrumento",
+      "ritmo",
+      "arte"
+    ],
+    "category": "cultura",
+    "difficulty": "easy"
+  },
+  {
+    "id": "8582e0a4-b708-4757-b989-6b3c18a20dfe",
+    "word": "ESPAÑA",
+    "tabooWords": [
+      "madrid",
+      "europa",
+      "paella",
+      "sol",
+      "toros"
+    ],
+    "category": "geografía",
+    "difficulty": "medium"
+  },
+  {
+    "id": "1df697eb-ce3a-4372-8752-913b999073c2",
+    "word": "SILLA",
+    "tabooWords": [
+      "sentarse",
+      "mesa",
+      "mueble",
+      "madera",
+      "habitación"
+    ],
+    "category": "objetos cotidianos",
+    "difficulty": "easy"
+  },
+  {
+    "id": "4100b862-6141-4f0b-93bd-34248d8ba822",
+    "word": "GATO",
+    "tabooWords": [
+      "miau",
+      "felino",
+      "mascota",
+      "ratón",
+      "pelo"
+    ],
+    "category": "animales",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ee97ad2e-4435-4aba-9dd4-eeae77752627",
+    "word": "MÉDICO",
+    "tabooWords": [
+      "hospital",
+      "enfermo",
+      "doctor",
+      "salud",
+      "paciente"
+    ],
+    "category": "profesiones",
+    "difficulty": "easy"
+  },
+  {
+    "id": "c954d740-00a8-4e8f-9b6b-d71dd3848af4",
+    "word": "ORDENADOR",
+    "tabooWords": [
+      "teclado",
+      "pantalla",
+      "internet",
+      "programas",
+      "ratón"
+    ],
+    "category": "tecnología",
+    "difficulty": "medium"
+  },
+  {
+    "id": "150e5c2d-b411-45ad-afed-3e5ed839d3a7",
+    "word": "CHOCOLATE",
+    "tabooWords": [
+      "cacao",
+      "dulce",
+      "postre",
+      "azúcar",
+      "tableta"
+    ],
+    "category": "comida",
+    "difficulty": "easy"
+  },
+  {
+    "id": "e31c1cbb-1d79-4a3c-8c05-305e8b1a2fb2",
+    "word": "MONTAÑA",
+    "tabooWords": [
+      "cima",
+      "paisaje",
+      "roca",
+      "altura",
+      "naturaleza"
+    ],
+    "category": "naturaleza",
+    "difficulty": "easy"
+  },
+  {
+    "id": "35b00492-a7d6-4983-8301-db674a2725ad",
+    "word": "TENIS",
+    "tabooWords": [
+      "raqueta",
+      "pelota",
+      "deporte",
+      "pista",
+      "juego"
+    ],
+    "category": "deportes",
+    "difficulty": "easy"
+  },
+  {
+    "id": "37693737-8929-4025-9266-d7e46870dfb9",
+    "word": "CINE",
+    "tabooWords": [
+      "película",
+      "pantalla",
+      "palomitas",
+      "actores",
+      "butaca"
+    ],
+    "category": "cultura",
+    "difficulty": "easy"
+  },
+  {
+    "id": "15298000-b038-4c93-a066-cdeb1aa0ff8d",
+    "word": "FRANCIA",
+    "tabooWords": [
+      "parís",
+      "europa",
+      "torre eiffel",
+      "vino",
+      "baguette"
+    ],
+    "category": "geografía",
+    "difficulty": "medium"
+  },
+  {
+    "id": "38924b87-0d66-4c64-b207-2ddf10ef13b0",
+    "word": "CUCHILLO",
+    "tabooWords": [
+      "cortar",
+      "tenedor",
+      "mesa",
+      "cocina",
+      "afilado"
+    ],
+    "category": "objetos cotidianos",
+    "difficulty": "easy"
+  },
+  {
+    "id": "e28d4cdf-21c4-46a0-b626-0421f84318d5",
+    "word": "PERRO",
+    "tabooWords": [
+      "ladrar",
+      "can",
+      "mascota",
+      "hueso",
+      "cola"
+    ],
+    "category": "animales",
+    "difficulty": "easy"
+  },
+  {
+    "id": "cefb9b9d-2551-4898-8e0e-6091e20b45a0",
+    "word": "PROFESOR",
+    "tabooWords": [
+      "escuela",
+      "enseñar",
+      "clase",
+      "alumnos",
+      "educación"
+    ],
+    "category": "profesiones",
+    "difficulty": "easy"
+  },
+  {
+    "id": "a2f84d6f-9479-4b3f-aa39-3e1ac802f476",
+    "word": "INTERNET",
+    "tabooWords": [
+      "red",
+      "conexión",
+      "wifi",
+      "ordenador",
+      "navegar"
+    ],
+    "category": "tecnología",
+    "difficulty": "medium"
+  },
+  {
+    "id": "3982a0a3-3499-44e4-8a1d-69477a66f068",
+    "word": "PAELLA",
+    "tabooWords": [
+      "arroz",
+      "marisco",
+      "española",
+      "sartén",
+      "valencia"
+    ],
+    "category": "comida",
+    "difficulty": "medium"
+  },
+  {
+    "id": "7aaf4a8d-b72f-4194-89af-a895c8003671",
+    "word": "PLAYA",
+    "tabooWords": [
+      "arena",
+      "mar",
+      "sol",
+      "vacaciones",
+      "costa"
+    ],
+    "category": "naturaleza",
+    "difficulty": "easy"
+  },
+  {
+    "id": "4b116cb4-4aca-48f3-9b59-fe0693304539",
+    "word": "BALONCESTO",
+    "tabooWords": [
+      "canasta",
+      "cancha",
+      "balón",
+      "deporte",
+      "equipo"
+    ],
+    "category": "deportes",
+    "difficulty": "easy"
+  },
+  {
+    "id": "9cd575a3-8e87-4fb1-a18b-6310341503e8",
+    "word": "LIBRO",
+    "tabooWords": [
+      "leer",
+      "páginas",
+      "historia",
+      "tapa",
+      "escritor"
+    ],
+    "category": "cultura",
+    "difficulty": "easy"
+  },
+  {
+    "id": "5358831c-a2cf-4483-a701-c3a5bf2768bb",
+    "word": "JAPÓN",
+    "tabooWords": [
+      "tokio",
+      "asia",
+      "sushi",
+      "kimono",
+      "tecnología"
+    ],
+    "category": "geografía",
+    "difficulty": "medium"
+  },
+  {
+    "id": "80d6b3ef-f726-4a68-bc31-56a6877744bd",
+    "word": "RELOJ",
+    "tabooWords": [
+      "tiempo",
+      "horas",
+      "muñeca",
+      "pared",
+      "agujas"
+    ],
+    "category": "objetos cotidianos",
+    "difficulty": "easy"
+  },
+  {
+    "id": "94029b4f-3b47-4a33-b3b5-aa2e71571b37",
+    "word": "ELEFANTE",
+    "tabooWords": [
+      "trompa",
+      "africano",
+      "grande",
+      "selva",
+      "marfil"
+    ],
+    "category": "animales",
+    "difficulty": "medium"
+  },
+  {
+    "id": "0218c9f3-3e71-409f-930e-74d9528a3396",
+    "word": "ABOGADO",
+    "tabooWords": [
+      "juicio",
+      "leyes",
+      "tribunal",
+      "defender",
+      "cliente"
+    ],
+    "category": "profesiones",
+    "difficulty": "medium"
+  },
+  {
+    "id": "fe0fad45-0059-42f8-a2d8-ddeae28367d1",
+    "word": "ROBOT",
+    "tabooWords": [
+      "inteligencia artificial",
+      "máquina",
+      "tecnología",
+      "programación",
+      "autómata"
+    ],
+    "category": "tecnología",
+    "difficulty": "hard"
+  },
+  {
+    "id": "e64a76b0-63bb-4384-a41d-2c793fd98952",
+    "word": "GASTRONOMÍA",
+    "tabooWords": [
+      "cocina",
+      "chef",
+      "alimentos",
+      "restaurante",
+      "plato"
+    ],
+    "category": "comida",
+    "difficulty": "hard"
+  },
+  {
+    "id": "acc9f7f4-9b2e-4f77-a084-96cfb83290b5",
+    "word": "LLAVE",
+    "tabooWords": [
+      "cerradura",
+      "abrir",
+      "puerta",
+      "metal",
+      "casa"
+    ],
+    "category": "objetos cotidianos",
+    "difficulty": "easy"
+  },
+  {
+    "id": "2148a9fd-838b-45cc-99cb-3d789bc06906",
+    "word": "EGIPTO",
+    "tabooWords": [
+      "pirámides",
+      "desierto",
+      "nilo",
+      "faraón",
+      "africa"
+    ],
+    "category": "geografía",
+    "difficulty": "medium"
+  },
+  {
+    "id": "cab57205-3661-45d2-a01f-16d3f8386f6b",
+    "word": "TABLETA",
+    "tabooWords": [
+      "ipad",
+      "pantalla",
+      "aplicaciones",
+      "portátil",
+      "digital"
+    ],
+    "category": "tecnología",
+    "difficulty": "medium"
+  },
+  {
+    "id": "a2bc93ba-1e50-4587-bb7c-32f0e94b82cc",
+    "word": "OCÉANO",
+    "tabooWords": [
+      "agua",
+      "mar",
+      "olas",
+      "pez",
+      "barco"
+    ],
+    "category": "naturaleza",
+    "difficulty": "medium"
+  },
+  {
+    "id": "1cddc46a-82cc-4f72-bf32-2fa41adeffe7",
+    "word": "AUSTRALIA",
+    "tabooWords": [
+      "canguro",
+      "sidney",
+      "desierto",
+      "oceanía",
+      "aborígenes"
+    ],
+    "category": "geografía",
+    "difficulty": "medium"
+  },
+  {
+    "id": "243e40f2-2d12-4fd2-9058-a1b583320618",
+    "word": "COCHE",
+    "tabooWords": [
+      "ruedas",
+      "motor",
+      "carretera",
+      "vehículo",
+      "gasolina"
+    ],
+    "category": "objetos cotidianos",
+    "difficulty": "medium"
+  },
+  {
+    "id": "0e35fb19-f03c-458d-852e-ca769591ea1a",
+    "word": "LEÓN",
+    "tabooWords": [
+      "melena",
+      "selva",
+      "rugido",
+      "felino",
+      "cazador"
+    ],
+    "category": "animales",
+    "difficulty": "medium"
+  },
+  {
+    "id": "900a1b98-c63a-480d-b0fa-3a9aa6d7e39a",
+    "word": "SATÉLITE",
+    "tabooWords": [
+      "espacio",
+      "órbita",
+      "señal",
+      "televisión",
+      "comunicación"
+    ],
+    "category": "tecnología",
+    "difficulty": "hard"
+  },
+  {
+    "id": "0a6ad9fe-f4f7-4089-aae6-44fc53a71e2e",
+    "word": "GAZPACHO",
+    "tabooWords": [
+      "tomate",
+      "andalucía",
+      "frío",
+      "sopa",
+      "verduras"
+    ],
+    "category": "comida",
+    "difficulty": "hard"
+  },
+  {
+    "id": "9d15374c-4f0f-4a9d-a2c4-3e605f14b83a",
+    "word": "AURORA",
+    "tabooWords": [
+      "boreal",
+      "luces",
+      "norte",
+      "polar",
+      "atmosfera"
+    ],
+    "category": "naturaleza",
+    "difficulty": "hard"
+  },
+  {
+    "id": "7e4716ba-ce6a-4fb5-91e1-503c5544fb75",
+    "word": "ATLETISMO",
+    "tabooWords": [
+      "carrera",
+      "salto",
+      "lanzamiento",
+      "olímpico",
+      "pista"
+    ],
+    "category": "deportes",
+    "difficulty": "hard"
+  },
+  {
+    "id": "57526a20-561a-4b24-b325-e4322b82b5c0",
+    "word": "ÓPERA",
+    "tabooWords": [
+      "canto",
+      "teatro",
+      "aria",
+      "música",
+      "escenario"
+    ],
+    "category": "cultura",
+    "difficulty": "hard"
+  },
+  {
+    "id": "23004f43-e4da-490d-a24d-36202e39b6bd",
+    "word": "GROENLANDIA",
+    "tabooWords": [
+      "hielo",
+      "dinamarca",
+      "ártico",
+      "isla",
+      "invierno"
+    ],
+    "category": "geografía",
+    "difficulty": "hard"
+  },
+  {
+    "id": "6ad8d62e-22ae-4bd7-a35c-573ed3cfe4a2",
+    "word": "PRISMÁTICOS",
+    "tabooWords": [
+      "lejos",
+      "ver",
+      "lentes",
+      "observar",
+      "aumento"
+    ],
+    "category": "objetos cotidianos",
+    "difficulty": "hard"
+  },
+  {
+    "id": "e092e2ae-9558-401b-9c5a-09f93cf08e4b",
+    "word": "ORNITORRINCO",
+    "tabooWords": [
+      "australia",
+      "pico",
+      "mamífero",
+      "venenoso",
+      "agua"
+    ],
+    "category": "animales",
+    "difficulty": "hard"
+  },
+  {
+    "id": "2c1edb18-2f0c-4f0b-9d0d-07379d5c0985",
+    "word": "ASTRONAUTA",
+    "tabooWords": [
+      "espacio",
+      "cohete",
+      "luna",
+      "estrellas",
+      "gravedad"
+    ],
+    "category": "profesiones",
+    "difficulty": "hard"
+  },
+  {
+    "id": "152ad899-1f7b-4e0c-b7b6-3087d9228e29",
+    "word": "SUSHI",
+    "tabooWords": [
+      "arroz",
+      "pescado",
+      "japonés",
+      "alga",
+      "crudo"
+    ],
+    "category": "comida",
+    "difficulty": "medium"
+  },
+  {
+    "id": "80c3716d-0c15-416e-898c-bcdbe14fffef",
+    "word": "SELVA",
+    "tabooWords": [
+      "tropical",
+      "árboles",
+      "animales",
+      "lluvia",
+      "amazonas"
+    ],
+    "category": "naturaleza",
+    "difficulty": "medium"
+  },
+  {
+    "id": "fd3c57e9-8a94-4c54-b4ae-4cf8d523ada2",
+    "word": "NATACIÓN",
+    "tabooWords": [
+      "piscina",
+      "agua",
+      "nadar",
+      "brazada",
+      "estilo"
+    ],
+    "category": "deportes",
+    "difficulty": "medium"
+  },
+  {
+    "id": "54907404-9284-4868-aa15-0b3712b2ed49",
+    "word": "ESCULTURA",
+    "tabooWords": [
+      "arte",
+      "estatua",
+      "modelar",
+      "piedra",
+      "museo"
+    ],
+    "category": "cultura",
+    "difficulty": "medium"
+  },
+  {
+    "id": "943d28c9-fd64-4f2b-8577-1b2fc5093195",
+    "word": "SOMBRERO",
+    "tabooWords": [
+      "cabeza",
+      "ala",
+      "sol",
+      "ropa",
+      "proteger"
+    ],
+    "category": "objetos cotidianos",
+    "difficulty": "medium"
+  },
+  {
+    "id": "1c366a21-0c60-4d4a-b73e-47c8e6116342",
+    "word": "TIBURÓN",
+    "tabooWords": [
+      "mar",
+      "dientes",
+      "pez",
+      "peligroso",
+      "aleta"
+    ],
+    "category": "animales",
+    "difficulty": "medium"
+  },
+  {
+    "id": "29423b18-470d-43dc-83a8-c8b33f8ef124",
+    "word": "PILOTO",
+    "tabooWords": [
+      "avión",
+      "vuelo",
+      "cabina",
+      "aeropuerto",
+      "viajar"
+    ],
+    "category": "profesiones",
+    "difficulty": "medium"
+  },
+  {
+    "id": "0ace22bc-1083-4567-bdfb-70c355e674b8",
+    "word": "DRON",
+    "tabooWords": [
+      "cámara",
+      "volar",
+      "control",
+      "remoto",
+      "aire"
+    ],
+    "category": "tecnología",
+    "difficulty": "medium"
+  },
+  {
+    "id": "e588eaba-2505-4738-90e6-8a100b7b4e74",
+    "word": "TACOS",
+    "tabooWords": [
+      "tortilla",
+      "méxico",
+      "carne",
+      "salsa",
+      "maíz"
+    ],
+    "category": "comida",
+    "difficulty": "medium"
+  },
+  {
+    "id": "35b02176-0e2f-47b4-8689-5affb3b41f85",
+    "word": "LAGO",
+    "tabooWords": [
+      "agua",
+      "montañas",
+      "paisaje",
+      "reflejo",
+      "pescar"
+    ],
+    "category": "naturaleza",
+    "difficulty": "medium"
+  },
+  {
+    "id": "89d548c7-e529-42f6-8fac-30caade9a426",
+    "word": "DESIERTO",
+    "tabooWords": [
+      "arena",
+      "calor",
+      "oasis",
+      "seco",
+      "duna"
+    ],
+    "category": "geografía",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ab6e6199-5bab-47a0-abcb-b21f38c3f88b",
+    "word": "DOCTOR",
+    "tabooWords": [
+      "enfermo",
+      "hospital",
+      "medicina",
+      "salud",
+      "paciente"
+    ],
+    "category": "profesiones",
+    "difficulty": "easy"
+  },
+  {
+    "id": "52038573-8630-4257-8719-0a6f7568be27",
+    "word": "RÍO",
+    "tabooWords": [
+      "agua",
+      "corriente",
+      "cauce",
+      "orilla",
+      "naturaleza"
+    ],
+    "category": "naturaleza",
+    "difficulty": "easy"
+  },
+  {
+    "id": "1e131a1a-3033-471b-aa86-1c6aee34d3d3",
+    "word": "MONTANA",
+    "tabooWords": [
+      "cima",
+      "roca",
+      "paisaje",
+      "altura",
+      "escalar"
+    ],
+    "category": "geografía",
+    "difficulty": "easy"
+  },
+  {
+    "id": "3c8e9b32-cc9f-4bc4-804b-ed69a64986d6",
+    "word": "TABLET",
+    "tabooWords": [
+      "pantalla",
+      "aplicación",
+      "digital",
+      "táctil",
+      "internet"
+    ],
+    "category": "tecnología",
+    "difficulty": "medium"
+  },
+  {
+    "id": "5f1dca11-16a8-4eaa-9efc-cac57e4c718d",
+    "word": "HELADO",
+    "tabooWords": [
+      "frío",
+      "dulce",
+      "postre",
+      "cucurucho",
+      "sabores"
+    ],
+    "category": "comida",
+    "difficulty": "easy"
+  },
+  {
+    "id": "0810e835-0619-48b3-bec1-e984e7a81a82",
+    "word": "FLOR",
+    "tabooWords": [
+      "pétalos",
+      "jardín",
+      "primavera",
+      "aroma",
+      "planta"
+    ],
+    "category": "naturaleza",
+    "difficulty": "easy"
+  },
+  {
+    "id": "8fa58825-8dcd-4069-aa79-aaa28be30ad9",
+    "word": "PELÍCULA",
+    "tabooWords": [
+      "cine",
+      "actor",
+      "historia",
+      "pantalla",
+      "palomitas"
+    ],
+    "category": "cultura",
+    "difficulty": "easy"
+  },
+  {
+    "id": "11e4f1d4-6294-4dbd-8a45-4b5b83253127",
+    "word": "VASO",
+    "tabooWords": [
+      "beber",
+      "cristal",
+      "agua",
+      "líquido",
+      "mesa"
+    ],
+    "category": "objetos cotidianos",
+    "difficulty": "easy"
+  },
+  {
+    "id": "00c6ad1d-ebb9-4238-947c-1023971d0a52",
+    "word": "COCINERO",
+    "tabooWords": [
+      "receta",
+      "comida",
+      "restaurante",
+      "fogones",
+      "chef"
+    ],
+    "category": "profesiones",
+    "difficulty": "easy"
+  },
+  {
+    "id": "5ff5a3d7-a388-4540-a686-bc7d0cb8bfce",
+    "word": "TEATRO",
+    "tabooWords": [
+      "obra",
+      "actor",
+      "escenario",
+      "público",
+      "drama"
+    ],
+    "category": "cultura",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ddff2b56-b2a3-4dbe-ac93-686c147aecb7",
+    "word": "ISLA",
+    "tabooWords": [
+      "océano",
+      "tierra",
+      "playa",
+      "palmeras",
+      "pacífico"
+    ],
+    "category": "geografía",
+    "difficulty": "easy"
+  },
+  {
+    "id": "f339078f-d4f2-40c0-901d-c6037281e082",
+    "word": "BOMBERO",
+    "tabooWords": [
+      "fuego",
+      "incendio",
+      "manguera",
+      "coche",
+      "salvar"
+    ],
+    "category": "profesiones",
+    "difficulty": "easy"
+  },
+  {
+    "id": "532c705f-94d2-4fec-ac5c-6963eb7c9790",
+    "word": "SOPA",
+    "tabooWords": [
+      "caliente",
+      "cucharada",
+      "verduras",
+      "caldo",
+      "plato"
+    ],
+    "category": "comida",
+    "difficulty": "easy"
+  },
+  {
+    "id": "bed1ef61-ac42-4c30-8852-d2a82450cb87",
+    "word": "LUNA",
+    "tabooWords": [
+      "noche",
+      "satélite",
+      "espacio",
+      "cráter",
+      "tierra"
+    ],
+    "category": "naturaleza",
+    "difficulty": "easy"
+  },
+  {
+    "id": "24542103-fe1a-42d8-90ee-140731859928",
+    "word": "CICLISMO",
+    "tabooWords": [
+      "bicicleta",
+      "pedalear",
+      "carrera",
+      "deporte",
+      "montaña"
+    ],
+    "category": "deportes",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ff610f56-3cc8-4b64-bb00-83f9ca476783",
+    "word": "BAILE",
+    "tabooWords": [
+      "música",
+      "ritmo",
+      "pasos",
+      "coreografía",
+      "fiesta"
+    ],
+    "category": "cultura",
+    "difficulty": "easy"
+  },
+  {
+    "id": "f3bc7428-7c55-4d5d-ae84-920e9ffaff64",
+    "word": "CAPITAL",
+    "tabooWords": [
+      "país",
+      "ciudad",
+      "gobierno",
+      "importante",
+      "monumento"
+    ],
+    "category": "geografía",
+    "difficulty": "medium"
+  },
+  {
+    "id": "f04aed54-7cf0-4df2-8e51-4380f7f791b0",
+    "word": "BOLÍGRAFO",
+    "tabooWords": [
+      "escribir",
+      "tinta",
+      "papel",
+      "clase",
+      "lapicero"
+    ],
+    "category": "objetos cotidianos",
+    "difficulty": "easy"
+  },
+  {
+    "id": "b9799efa-ffc3-4bb2-afb4-75be2f58c887",
+    "word": "POLICÍA",
+    "tabooWords": [
+      "delito",
+      "orden",
+      "seguridad",
+      "uniforme",
+      "arrestar"
+    ],
+    "category": "profesiones",
+    "difficulty": "easy"
+  },
+  {
+    "id": "19dbac2c-8b5e-4ce5-96a6-04dd9d86e9a3",
+    "word": "IPAD",
+    "tabooWords": [
+      "apple",
+      "tableta",
+      "táctil",
+      "aplicaciones",
+      "digital"
+    ],
+    "category": "tecnología",
+    "difficulty": "medium"
+  },
+  {
+    "id": "4071936b-d0b8-4aba-8744-3a8898779666",
+    "word": "SANDWICH",
+    "tabooWords": [
+      "pan",
+      "jamón",
+      "queso",
+      "comida",
+      "rebanada"
+    ],
+    "category": "comida",
+    "difficulty": "easy"
+  },
+  {
+    "id": "038f5da4-d123-46af-853d-f3e596b6afc0",
+    "word": "ESTRELLA",
+    "tabooWords": [
+      "cielo",
+      "noche",
+      "brillar",
+      "espacio",
+      "galaxia"
+    ],
+    "category": "naturaleza",
+    "difficulty": "easy"
+  }
+]
