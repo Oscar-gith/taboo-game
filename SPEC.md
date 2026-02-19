@@ -196,9 +196,9 @@ An interactive tutorial explains the game rules to new players.
 | Slide | Title | Content |
 |-------|-------|---------|
 | 1 | ¡Bienvenido a Taboo! | El objetivo es que tu equipo adivine la palabra secreta |
-| 2 | Roles | **Descriptor**: da pistas. **Adivinadores**: adivinan. **Vigilantes**: cazan palabras prohibidas |
-| 3 | Palabras Prohibidas | No puedes decir la palabra principal ni las 5 palabras prohibidas listadas |
-| 4 | Puntuación | ✓ Correcto: +1 punto. ¡Prohibida!: -1 punto. Pasar: 0 puntos |
+| 2 | Roles | **Descriptor**: da pistas. **Adivinadores**: adivinan. **Vigilantes**: cazan palabras Taboo |
+| 3 | Palabras Taboo | No puedes decir la palabra principal ni las 5 palabras Taboo listadas |
+| 4 | Puntuación | ✓ Correcto: +1 punto. ¡Taboo!: -1 punto. Pasar: 0 puntos |
 | 5 | ¡A jugar! | Crea una sala o únete con un código de 6 letras |
 
 ### UI Elements
