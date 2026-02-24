@@ -47,18 +47,54 @@ io.on('connection', (socket) => {
 
   // ── CREATE ROOM ──────────────────────────────────────────
 
-  socket.on('create_room', ({ playerName, playerId: existingPlayerId }) => {
-    // Host is automatically assigned to Equipo A (first team)
-    const { room, hostPlayerId } = gameManager.createRoom(socket.id, playerName);
+  socket.on('create_room', ({ playerName, playerId: existingPlayerId, mode = 'classic' }) => {
+    // Validate mode
+    if (!config.GAME_MODES.includes(mode)) {
+      return socket.emit('error', { code: 'INVALID_MODE', message: 'Modo de juego inválido.' });
+    }
+
+    // Create room with specified mode
+    const { room, hostPlayerId } = gameManager.createRoom(socket.id, playerName, mode);
     socket.join(room.code);
 
-    socket.emit('room_created', {
-      roomCode:  room.code,
-      roomState: room.toPublicState(),
-      playerId:  hostPlayerId,
-    });
+    if (mode === 'practice') {
+      // Practice mode: start immediately with cards
+      if (cardStore.count === 0) {
+        gameManager.deleteRoom(room.code);
+        return socket.emit('error', { code: 'DECK_EMPTY', message: 'No hay cartas disponibles. Ejecuta: npm run generate-cards' });
+      }
 
-    console.log(`Room ${room.code} created by "${playerName}" (Equipo A)`);
+      const deck = cardStore.getShuffledDeck();
+      const result = room.startPractice(deck);
+
+      if (result.error) {
+        gameManager.deleteRoom(room.code);
+        return socket.emit('error', { code: result.error, message: 'Error al iniciar práctica.' });
+      }
+
+      socket.emit('room_created', {
+        roomCode:  room.code,
+        roomState: room.toPublicState(),
+        playerId:  hostPlayerId,
+      });
+
+      // Send the first card immediately
+      socket.emit('practice_started', {
+        card: result.card,
+        stats: result.stats,
+      });
+
+      console.log(`Practice room ${room.code} created by "${playerName}"`);
+    } else {
+      // Classic mode: host is assigned to Equipo A
+      socket.emit('room_created', {
+        roomCode:  room.code,
+        roomState: room.toPublicState(),
+        playerId:  hostPlayerId,
+      });
+
+      console.log(`Room ${room.code} created by "${playerName}" (Equipo A)`);
+    }
   });
 
   // ── JOIN ROOM ────────────────────────────────────────────
@@ -67,6 +103,11 @@ io.on('connection', (socket) => {
     const room = gameManager.getRoom(roomCode);
     if (!room) {
       return socket.emit('error', { code: 'ROOM_NOT_FOUND', message: 'Sala no encontrada. Verifica el código.' });
+    }
+
+    // Practice mode rooms don't allow other players to join
+    if (room.mode === 'practice') {
+      return socket.emit('error', { code: 'ROOM_IS_PRACTICE', message: 'Esta es una sala de práctica privada.' });
     }
 
     // Check if this player is reconnecting with a known ID
@@ -216,6 +257,45 @@ io.on('connection', (socket) => {
     io.to(roomCode).emit('room_updated', { roomState: room.toPublicState() });
   });
 
+  // ── PRACTICE MODE: END PRACTICE ─────────────────────────
+
+  socket.on('end_practice', ({ roomCode }) => {
+    const { room, playerId } = _getPlayerRoom(socket.id, roomCode);
+    if (!room) return socket.emit('error', { code: 'ROOM_NOT_FOUND', message: 'Sala no encontrada.' });
+
+    if (room.mode !== 'practice') {
+      return socket.emit('error', { code: 'NOT_PRACTICE_MODE', message: 'Esta no es una sala de práctica.' });
+    }
+
+    const result = room.endPractice();
+    if (result.error) {
+      return socket.emit('error', { code: result.error, message: _errorMessage(result.error) });
+    }
+
+    socket.emit('practice_ended', { stats: result.stats });
+    console.log(`Practice ended in room ${roomCode} — stats: ${JSON.stringify(result.stats)}`);
+  });
+
+  // ── PRACTICE MODE: RESTART PRACTICE ─────────────────────
+
+  socket.on('restart_practice', ({ roomCode }) => {
+    const { room, playerId } = _getPlayerRoom(socket.id, roomCode);
+    if (!room) return socket.emit('error', { code: 'ROOM_NOT_FOUND', message: 'Sala no encontrada.' });
+
+    if (room.mode !== 'practice') {
+      return socket.emit('error', { code: 'NOT_PRACTICE_MODE', message: 'Esta no es una sala de práctica.' });
+    }
+
+    const deck = cardStore.getShuffledDeck();
+    const result = room.restartPractice(deck);
+    if (result.error) {
+      return socket.emit('error', { code: result.error, message: _errorMessage(result.error) });
+    }
+
+    socket.emit('practice_started', { card: result.card, stats: result.stats });
+    console.log(`Practice restarted in room ${roomCode}`);
+  });
+
   // ── LEAVE ROOM ────────────────────────────────────────────
 
   socket.on('leave_room', ({ roomCode }) => {
@@ -235,6 +315,12 @@ io.on('connection', (socket) => {
     const { room, playerId } = _getPlayerRoom(socket.id, roomCode);
     if (!room) return;
 
+    // Practice mode: handle separately
+    if (room.mode === 'practice') {
+      return _handlePracticeCardAction(socket, room, roomCode, result);
+    }
+
+    // Classic mode: existing logic
     // For buzz, we may not have a cardId from the client — use the current card
     const effectiveCardId = cardId || room.currentCard?.id;
     if (!effectiveCardId) return;
@@ -278,6 +364,25 @@ io.on('connection', (socket) => {
     cardStore.checkAndRefill((totalCards) => {
       io.to(roomCode).emit('cards_ready', { totalCards });
     });
+  }
+
+  function _handlePracticeCardAction(socket, room, roomCode, result) {
+    // Practice mode only supports 'correct' and 'skip'
+    if (result !== 'correct' && result !== 'skip') return;
+
+    const res = room.practiceCard(result);
+    if (res.error) {
+      return socket.emit('error', { code: res.error, message: _errorMessage(res.error) });
+    }
+
+    if (res.deckEmpty) {
+      // No more cards — end practice
+      socket.emit('practice_ended', { stats: res.stats });
+      console.log(`Practice ended (deck empty) in room ${roomCode}`);
+    } else {
+      // Send next card
+      socket.emit('practice_card', { card: res.nextCard, stats: res.stats });
+    }
   }
 
   function _handleDisconnect(socket, specificRoomCode = null) {

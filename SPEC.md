@@ -79,6 +79,49 @@ Note: Buzzers (opposing teams) do NOT get points for catching violations.
 
 ---
 
+## Practice Mode (Solo)
+
+An alternative mode for a single player to explore cards and practice descriptions without forming teams.
+
+### Mode Selection
+
+- When creating a room, the host chooses between **Classic Mode** or **Practice Mode**
+- The mode is fixed at room creation and cannot be changed
+- Practice mode only admits 1 player; join attempts are rejected with `ROOM_IS_PRACTICE`
+
+### Practice Mode Rules
+
+| Aspect | Classic Mode | Practice Mode |
+|--------|--------------|---------------|
+| Players | 4-12 (2 teams) | 1 |
+| Timer | 60 seconds | No timer |
+| Teams | Equipo A vs Equipo B | None |
+| Roles | Describer, Guessers, Buzzers | Describer only |
+| Buzz button | Yes (buzzers) | No |
+| Scoring | Affects team score | Personal stats only |
+
+### Practice Mode Flow
+
+1. Player creates a room in Practice Mode
+2. Enters the practice screen directly (no lobby wait)
+3. A card is shown automatically
+4. Player can:
+   - **"✓ Correcto"** → Card counted as practiced, next card
+   - **"→ Pasar"** → Card skipped, next card
+   - **"Terminar práctica"** → End session, show summary
+5. Cards used in practice are NOT removed from the global deck (can repeat)
+
+### End of Practice Screen
+
+Shows:
+- Total cards viewed
+- Cards marked as "Correcto"
+- Cards skipped
+- Button "Practicar de nuevo" → restart with new cards
+- Button "Volver al inicio" → return to home screen
+
+---
+
 ## State Machine
 
 ### Room States
@@ -101,6 +144,15 @@ WAITING_FOR_DESCRIBER
               └─→ WAITING_FOR_DESCRIBER  (after 3s pause; next team's turn)
 ```
 
+### Practice Mode States
+
+```
+PRACTICE_ACTIVE
+  ├─→ PRACTICE_ACTIVE    (card correct/skipped; next card drawn)
+  └─→ PRACTICE_ENDED     (player clicks "Terminar práctica")
+        └─→ (room destroyed or restart)
+```
+
 ### Role Assignment
 
 Each turn:
@@ -118,8 +170,10 @@ Describer rotation: cycles through team members before repeating
 ### Client → Server
 
 ```
-create_room      { playerName }
-                 // Host is auto-assigned to "Equipo A"
+create_room      { playerName, mode }
+                 // mode: 'classic' | 'practice' (default: 'classic')
+                 // Classic: Host is auto-assigned to "Equipo A"
+                 // Practice: Player enters practice immediately
 join_room        { roomCode, playerName, teamName }
                  // teamName must be "Equipo A" or "Equipo B"
                  // If game in progress: player joins as spectator
@@ -132,6 +186,8 @@ card_correct     { roomCode, cardId }            [active team only]
 card_buzz        { roomCode, cardId }            [opposing team only]
 card_skip        { roomCode, cardId }            [describer only]
 leave_room       { roomCode }
+end_practice     { roomCode }                    [practice mode only]
+restart_practice { roomCode }                    [practice mode only]
 ```
 
 ### Server → Client
@@ -154,6 +210,12 @@ cards_generating { }                                      → all players in roo
 cards_ready      { totalCards }                           → all players in room
 reconnect_success { roomState }                           → reconnecting player
 reconnect_failed  { reason }                              → reconnecting player
+practice_started  { card, stats }                         → practice player
+                  // stats: { cardsViewed, cardsCorrect, cardsSkipped }
+practice_card     { card, stats }                         → practice player
+                  // Sent after each correct/skip
+practice_ended    { stats }                               → practice player
+                  // Final stats for the session
 host_changed      { newHostName, newHostId }              → all players in room
 spectator_joined  { playerName, teamName }                → all players in room
 spectator_activated { playerName }                        → all players in room
@@ -289,6 +351,8 @@ The room code remains visible throughout the entire game session:
 | `NEED_MORE_PLAYERS` | `start_game` when any team has <2 players |
 | `DECK_EMPTY` | Card draw attempted with no cards remaining |
 | `CARD_API_FAILED` | Gemini API call failed during card generation |
+| `ROOM_IS_PRACTICE` | `join_room` attempts to join a practice mode room |
+| `NOT_PRACTICE_MODE` | `end_practice` or `restart_practice` called on classic room |
 
 ---
 
@@ -306,6 +370,7 @@ The room code remains visible throughout the entire game session:
 | `ROOM_EXPIRY_MS` | 3,600,000 | 1 hour inactivity expiry |
 | `RECONNECT_GRACE_MS` | 60,000 | Grace period to reconnect |
 | `TURN_END_PAUSE_MS` | 3,000 | Pause between turns |
+| `GAME_MODES` | `['classic', 'practice']` | Available game modes |
 
 ---
 

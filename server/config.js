@@ -2,6 +2,9 @@
 // Change values here to tune game balance and server behavior.
 
 module.exports = {
+  // Game modes
+  GAME_MODES: ['classic', 'practice'],
+
   // Turn timing
   TURN_DURATION_SECONDS: 60,
   TURN_END_PAUSE_MS: 3000,        // Pause between turns so players can see the summary

@@ -116,6 +116,30 @@ Every socket handler in `server/index.js` follows this pattern:
 - **Comments**: Explain WHY non-obvious decisions were made, not what the code does
 - **No magic numbers**: Put all game constants in `server/config.js`
 
+## Bug & Backlog Management — GitHub Issues
+
+**NO usar archivos markdown para gestionar bugs o backlog.** Usar GitHub Issues exclusivamente.
+
+```bash
+# Listar bugs abiertos
+gh issue list --label bug
+
+# Reportar un nuevo bug
+gh issue create --title "Título del bug" --body "Descripción" --label bug
+
+# Ver detalles de un issue
+gh issue view 123
+
+# Cerrar un bug resuelto
+gh issue close 123 --comment "Resuelto en commit abc1234"
+```
+
+El archivo `BACKLOG.md` es solo para documentar features futuras de referencia, no para tracking activo.
+
+Use el comando `/bug` para gestionar bugs via GitHub Issues.
+
+---
+
 ## When Adding New Features — SDD Workflow
 
 1. **Read SPEC.md** — does this feature conflict with anything?

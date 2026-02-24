@@ -28,6 +28,7 @@ let myTeamName   = null;
 let currentCard  = null;   // Only set for the describer
 let currentScores = {};
 let isSpectator  = false;  // True if joined mid-game
+let isPracticeMode = false; // True if in practice mode
 
 // Save player data to localStorage
 function savePlayerData() {
@@ -69,12 +70,20 @@ socket.on('room_created', ({ roomCode, roomState, playerId }) => {
   myTeamName   = roomState.players[playerId]?.teamName || null;
   myPlayerName = roomState.players[playerId]?.name || null;
   isSpectator  = false;
+  isPracticeMode = roomState.mode === 'practice';
   savePlayerData();
 
-  document.getElementById('lobby-room-code').textContent = roomCode;
   updateRoomCodeBadges(roomCode);
-  renderLobby(roomState);
-  showScreen('screen-lobby');
+
+  if (isPracticeMode) {
+    // Practice mode: wait for practice_started event to show the screen
+    document.getElementById('room-badge-practice').textContent = roomCode;
+  } else {
+    // Classic mode: go to lobby
+    document.getElementById('lobby-room-code').textContent = roomCode;
+    renderLobby(roomState);
+    showScreen('screen-lobby');
+  }
 });
 
 // Server accepted our join_room request
@@ -149,7 +158,8 @@ function updateRoomCodeBadges(roomCode) {
     'room-badge-describer',
     'room-badge-observer',
     'room-badge-ended',
-    'room-badge-gameover'
+    'room-badge-gameover',
+    'room-badge-practice'
   ];
   badgeIds.forEach(id => {
     const el = document.getElementById(id);
@@ -409,6 +419,31 @@ socket.on('error', ({ code, message }) => {
   console.error(`Server error [${code}]: ${message}`);
 });
 
+// ── PRACTICE MODE EVENTS ─────────────────────────────────────
+
+// Practice session started — show the first card
+socket.on('practice_started', ({ card, stats }) => {
+  isPracticeMode = true;
+  currentCard = card;
+  renderPracticeCard(card);
+  updatePracticeStats(stats);
+  showScreen('screen-practice');
+});
+
+// Next practice card received
+socket.on('practice_card', ({ card, stats }) => {
+  currentCard = card;
+  renderPracticeCard(card);
+  updatePracticeStats(stats);
+});
+
+// Practice session ended
+socket.on('practice_ended', ({ stats }) => {
+  currentCard = null;
+  renderPracticeSummary(stats);
+  showScreen('screen-practice-ended');
+});
+
 // ── 4. CLIENT → SERVER EVENTS ─────────────────────────────────
 
 // --- Home screen ---
@@ -416,8 +451,10 @@ socket.on('error', ({ code, message }) => {
 document.getElementById('btn-create-room').addEventListener('click', () => {
   const playerName = document.getElementById('player-name').value.trim();
   if (!playerName) return showToast('Escribe tu nombre', 'warning');
-  // Host is auto-assigned to Equipo A on the server
-  socket.emit('create_room', { playerName, playerId: myPlayerId });
+  // Get selected game mode
+  const modeChoice = document.querySelector('input[name="game-mode"]:checked');
+  const mode = modeChoice ? modeChoice.value : 'classic';
+  socket.emit('create_room', { playerName, playerId: myPlayerId, mode });
 });
 
 document.getElementById('btn-join-room').addEventListener('click', () => {
@@ -488,6 +525,33 @@ document.getElementById('btn-buzz').addEventListener('click', () => {
 
 document.getElementById('btn-play-again').addEventListener('click', () => {
   socket.emit('play_again', { roomCode: myRoomCode });
+});
+
+// --- Practice mode ---
+
+document.getElementById('btn-practice-correct').addEventListener('click', () => {
+  if (!currentCard) return;
+  socket.emit('card_correct', { roomCode: myRoomCode, cardId: currentCard.id });
+});
+
+document.getElementById('btn-practice-skip').addEventListener('click', () => {
+  if (!currentCard) return;
+  socket.emit('card_skip', { roomCode: myRoomCode, cardId: currentCard.id });
+});
+
+document.getElementById('btn-end-practice').addEventListener('click', () => {
+  socket.emit('end_practice', { roomCode: myRoomCode });
+});
+
+document.getElementById('btn-restart-practice').addEventListener('click', () => {
+  socket.emit('restart_practice', { roomCode: myRoomCode });
+});
+
+document.getElementById('btn-exit-practice').addEventListener('click', () => {
+  // Clear room data and go back to home
+  clearRoomData();
+  isPracticeMode = false;
+  showScreen('screen-home');
 });
 
 // ── 5. RENDER HELPERS ─────────────────────────────────────────
@@ -574,6 +638,28 @@ function renderBuzzerCard(card) {
   // Show the buzzer card and button
   buzzerCard.classList.remove('hidden');
   buzzBtn.classList.remove('hidden');
+}
+
+// Render the Taboo card for practice mode
+function renderPracticeCard(card) {
+  document.getElementById('practice-card-word').textContent = card.word;
+
+  const listEl = document.getElementById('practice-taboo-words-list');
+  listEl.innerHTML = card.tabooWords.map(w => `<li>${escapeHtml(w)}</li>`).join('');
+}
+
+// Update practice stats display
+function updatePracticeStats(stats) {
+  document.getElementById('practice-viewed').textContent = stats.cardsViewed || 0;
+  document.getElementById('practice-correct').textContent = stats.cardsCorrect || 0;
+  document.getElementById('practice-skipped').textContent = stats.cardsSkipped || 0;
+}
+
+// Render practice session summary
+function renderPracticeSummary(stats) {
+  document.getElementById('summary-viewed').textContent = stats.cardsViewed || 0;
+  document.getElementById('summary-correct').textContent = stats.cardsCorrect || 0;
+  document.getElementById('summary-skipped').textContent = stats.cardsSkipped || 0;
 }
 
 // Render scores as chips (full version: waiting screen)
@@ -834,6 +920,18 @@ document.getElementById('player-name').addEventListener('change', (e) => {
   if (myPlayerName) {
     localStorage.setItem('taboo_player_name', myPlayerName);
   }
+});
+
+// Update hint text when game mode changes
+document.querySelectorAll('input[name="game-mode"]').forEach(radio => {
+  radio.addEventListener('change', (e) => {
+    const hint = document.getElementById('create-room-hint');
+    if (e.target.value === 'practice') {
+      hint.textContent = 'Practica solo, sin timer';
+    } else {
+      hint.textContent = 'Serás asignado al Equipo A';
+    }
+  });
 });
 
 // Attempt to reconnect to a room if we have stored room data

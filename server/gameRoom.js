@@ -11,24 +11,27 @@ const { v4: uuidv4 } = require('uuid');
 const config = require('./config');
 
 class GameRoom {
-  constructor(code, hostSocketId, hostPlayerId, hostPlayerName) {
+  constructor(code, hostSocketId, hostPlayerId, hostPlayerName, mode = 'classic') {
     this.code        = code;
-    this.state       = 'lobby';   // 'lobby' | 'playing' | 'game_over'
-    this.turnPhase   = null;      // 'waiting_for_describer' | 'turn_active' | 'turn_ended'
+    this.mode        = mode;      // 'classic' | 'practice'
+    this.state       = mode === 'practice' ? 'practice_active' : 'lobby';
+    this.turnPhase   = null;      // 'waiting_for_describer' | 'turn_active' | 'turn_ended' (classic only)
 
     // players: { playerId -> { id, name, teamName, socketId, isHost, status, joinOrder } }
     // status: 'active' | 'spectating' (spectating = joined mid-game, waiting for next round)
     this.players = {};
     this.nextJoinOrder = 0;  // Counter for tracking join order (for host delegation)
 
-    // teams: Fixed teams created upfront (Equipo A, Equipo B)
+    // teams: Fixed teams created upfront (Equipo A, Equipo B) — only for classic mode
     // { teamName -> { name, score, memberIds: [], describerIndex: 0 } }
     this.teams = {};
-    config.TEAM_NAMES.forEach(name => {
-      this.teams[name] = { name, score: 0, memberIds: [], describerIndex: 0 };
-    });
+    if (mode === 'classic') {
+      config.TEAM_NAMES.forEach(name => {
+        this.teams[name] = { name, score: 0, memberIds: [], describerIndex: 0 };
+      });
+    }
 
-    // Turn rotation
+    // Turn rotation (classic mode only)
     this.teamOrder       = [];   // Ordered list of team names
     this.activeTeamIndex = 0;    // Index into teamOrder
 
@@ -37,7 +40,7 @@ class GameRoom {
     this.currentCard = null;
     this.usedCardIds = new Set();
 
-    // Turn state
+    // Turn state (classic mode only)
     this.turnTimer        = null;
     this.secondsRemaining = 0;
     this.turnNumber       = 0;
@@ -45,7 +48,14 @@ class GameRoom {
     // Stats: { playerId -> { described: 0, guessed: 0 } }
     this.playerStats = {};
 
-    // Win configuration
+    // Practice mode stats
+    this.practiceStats = {
+      cardsViewed: 0,
+      cardsCorrect: 0,
+      cardsSkipped: 0
+    };
+
+    // Win configuration (classic mode only)
     this.scoreLimit = config.DEFAULT_SCORE_LIMIT;
     this.winMode    = 'score_limit';   // 'score_limit' | 'deck_mode'
 
@@ -56,9 +66,30 @@ class GameRoom {
     // Reconnect timers: { playerId -> timeoutId }
     this.reconnectTimers = {};
 
-    // Add the host to Equipo A (first team)
-    // Note: Host is always active, never a spectator
-    this.addPlayer(hostSocketId, hostPlayerId, hostPlayerName, config.TEAM_NAMES[0], true);
+    // Add the player
+    if (mode === 'practice') {
+      // Practice mode: single player, no team
+      this.addPracticePlayer(hostSocketId, hostPlayerId, hostPlayerName);
+    } else {
+      // Classic mode: host joins Equipo A
+      this.addPlayer(hostSocketId, hostPlayerId, hostPlayerName, config.TEAM_NAMES[0], true);
+    }
+  }
+
+  // Add a player for practice mode (no team)
+  addPracticePlayer(socketId, playerId, name) {
+    this.players[playerId] = {
+      id: playerId,
+      name,
+      teamName: null,
+      socketId,
+      isHost: true,
+      status: 'active',
+      joinOrder: this.nextJoinOrder++
+    };
+    this.playerStats[playerId] = { described: 0, guessed: 0 };
+    this.lastActivityAt = Date.now();
+    return {};
   }
 
   // Get list of spectators (players waiting to join)
@@ -372,7 +403,11 @@ class GameRoom {
   // Called when the turn timer expires — advance to next team
   // Returns: { scores, teamStats, nextTeam, nextDescriberName, activatedSpectators }
   endTurn() {
-    this.turnPhase   = 'turn_ended';
+    this.turnPhase = 'turn_ended';
+    // Mark the current card as used so it won't appear again
+    if (this.currentCard) {
+      this.usedCardIds.add(this.currentCard.id);
+    }
     this.currentCard = null;
     this._clearTimer();
 
@@ -424,22 +459,120 @@ class GameRoom {
     this.lastActivityAt = Date.now();
   }
 
+  // ── PRACTICE MODE METHODS ───────────────────────────────────
+
+  // Start practice session with a deck
+  startPractice(deck) {
+    if (this.mode !== 'practice') return { error: 'NOT_PRACTICE_MODE' };
+
+    this.deck = [...deck];
+    this.state = 'practice_active';
+    this.practiceStats = { cardsViewed: 0, cardsCorrect: 0, cardsSkipped: 0 };
+    this.lastActivityAt = Date.now();
+
+    // Draw the first card
+    const card = this._drawPracticeCard();
+    if (!card) return { error: 'DECK_EMPTY' };
+
+    this.currentCard = card;
+    this.practiceStats.cardsViewed++;
+
+    return { card, stats: { ...this.practiceStats } };
+  }
+
+  // Process a practice card result: 'correct' | 'skip'
+  // Returns the next card and updated stats
+  practiceCard(result) {
+    if (this.mode !== 'practice') return { error: 'NOT_PRACTICE_MODE' };
+    if (this.state !== 'practice_active') return { error: 'NOT_PLAYING' };
+    if (!this.currentCard) return { error: 'NO_CARD' };
+
+    // Update stats
+    if (result === 'correct') {
+      this.practiceStats.cardsCorrect++;
+    } else if (result === 'skip') {
+      this.practiceStats.cardsSkipped++;
+    }
+
+    // Draw next card (practice mode doesn't mark cards as used - can repeat)
+    const nextCard = this._drawPracticeCard();
+    if (!nextCard) {
+      // No more cards - end practice
+      this.state = 'practice_ended';
+      this.currentCard = null;
+      return {
+        nextCard: null,
+        stats: { ...this.practiceStats },
+        deckEmpty: true
+      };
+    }
+
+    this.currentCard = nextCard;
+    this.practiceStats.cardsViewed++;
+    this.lastActivityAt = Date.now();
+
+    return {
+      nextCard,
+      stats: { ...this.practiceStats },
+      deckEmpty: false
+    };
+  }
+
+  // End practice session
+  endPractice() {
+    if (this.mode !== 'practice') return { error: 'NOT_PRACTICE_MODE' };
+
+    this.state = 'practice_ended';
+    this.currentCard = null;
+    this.lastActivityAt = Date.now();
+
+    return { stats: { ...this.practiceStats } };
+  }
+
+  // Restart practice session
+  restartPractice(deck) {
+    if (this.mode !== 'practice') return { error: 'NOT_PRACTICE_MODE' };
+
+    return this.startPractice(deck);
+  }
+
+  // Draw a random card for practice (doesn't mark as used)
+  _drawPracticeCard() {
+    if (this.deck.length === 0) return null;
+    // Pick a random card from the deck
+    const randomIndex = Math.floor(Math.random() * this.deck.length);
+    return this.deck[randomIndex];
+  }
+
   // ── PUBLIC SERIALIZATION ─────────────────────────────────────
 
   // Safe to send to ALL clients — does NOT include the current card
   toPublicState() {
-    return {
+    const base = {
       code:         this.code,
+      mode:         this.mode,
       state:        this.state,
-      turnPhase:    this.turnPhase,
       players:      this.players,
+      hostPlayerId: this.hostPlayerId,
+    };
+
+    if (this.mode === 'practice') {
+      return {
+        ...base,
+        practiceStats: { ...this.practiceStats },
+      };
+    }
+
+    // Classic mode includes team/turn data
+    return {
+      ...base,
+      turnPhase:    this.turnPhase,
       teams:        this.teams,
       scores:       this._buildScores(),
       teamOrder:    this.teamOrder,
       activeTeamIndex: this.activeTeamIndex,
       turnNumber:   this.turnNumber,
       secondsRemaining: this.secondsRemaining,
-      hostPlayerId: this.hostPlayerId,
     };
   }
 

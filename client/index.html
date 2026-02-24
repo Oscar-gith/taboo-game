@@ -24,10 +24,32 @@
         <input id="player-name" type="text" placeholder="Ej: María" maxlength="20" autocomplete="off">
       </div>
 
+      <div class="field-group">
+        <label>Modo de juego</label>
+        <div class="mode-selector">
+          <label class="mode-option">
+            <input type="radio" name="game-mode" value="classic" checked>
+            <span class="mode-label">
+              <span class="mode-icon">👥</span>
+              <span class="mode-name">Clásico</span>
+              <span class="mode-desc">4+ jugadores, 2 equipos</span>
+            </span>
+          </label>
+          <label class="mode-option">
+            <input type="radio" name="game-mode" value="practice">
+            <span class="mode-label">
+              <span class="mode-icon">🎯</span>
+              <span class="mode-name">Práctica</span>
+              <span class="mode-desc">1 jugador, sin timer</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
       <button id="btn-create-room" class="btn btn-primary btn-large">
         Crear sala nueva
       </button>
-      <p class="hint" style="text-align:center; margin-top:0.5rem;">Serás asignado al Equipo A</p>
+      <p id="create-room-hint" class="hint" style="text-align:center; margin-top:0.5rem;">Serás asignado al Equipo A</p>
 
       <div class="divider">— o —</div>
 
@@ -248,6 +270,78 @@
       <button id="btn-play-again" class="btn btn-primary btn-large hidden">
         Jugar de nuevo
       </button>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 8: PRACTICE MODE — Solo practice session
+       ============================================================ -->
+  <div id="screen-practice" class="screen">
+    <header class="turn-header practice-header">
+      <span id="room-badge-practice" class="room-code-badge">------</span>
+      <div id="practice-stats" class="practice-stats-bar">
+        <span class="stat-item">Vistas: <strong id="practice-viewed">0</strong></span>
+        <span class="stat-item correct">Correctas: <strong id="practice-correct">0</strong></span>
+        <span class="stat-item skip">Pasadas: <strong id="practice-skipped">0</strong></span>
+      </div>
+    </header>
+
+    <main class="card-panel">
+      <p class="practice-label">Modo Práctica</p>
+      <div id="practice-card-display" class="taboo-card">
+        <h2 id="practice-card-word" class="main-word">CARGANDO...</h2>
+        <ul id="practice-taboo-words-list" class="taboo-list">
+          <!-- <li>palabra</li> x5 -->
+        </ul>
+      </div>
+
+      <div class="action-buttons">
+        <button id="btn-practice-correct" class="btn btn-correct">
+          ✓ Correcto
+        </button>
+        <button id="btn-practice-skip" class="btn btn-skip">
+          → Pasar
+        </button>
+      </div>
+
+      <button id="btn-end-practice" class="btn btn-ghost btn-small" style="margin-top: 1.5rem;">
+        Terminar práctica
+      </button>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 9: PRACTICE ENDED — Summary after practice
+       ============================================================ -->
+  <div id="screen-practice-ended" class="screen">
+    <header class="game-header">
+      <h1 class="practice-end-title">¡Práctica completada!</h1>
+    </header>
+
+    <main class="card-panel">
+      <div class="practice-summary">
+        <div class="practice-stat-row">
+          <span class="stat-label">Cartas vistas</span>
+          <span id="summary-viewed" class="stat-value">0</span>
+        </div>
+        <div class="practice-stat-row correct">
+          <span class="stat-label">Marcadas correctas</span>
+          <span id="summary-correct" class="stat-value">0</span>
+        </div>
+        <div class="practice-stat-row skip">
+          <span class="stat-label">Pasadas</span>
+          <span id="summary-skipped" class="stat-value">0</span>
+        </div>
+      </div>
+
+      <div class="practice-actions">
+        <button id="btn-restart-practice" class="btn btn-primary btn-large">
+          Practicar de nuevo
+        </button>
+        <button id="btn-exit-practice" class="btn btn-secondary btn-large">
+          Volver al inicio
+        </button>
+      </div>
     </main>
   </div>
 

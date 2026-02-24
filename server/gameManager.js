@@ -23,10 +23,11 @@ class GameManager {
 
   // Create a new room and return it
   // Host is auto-assigned to Equipo A (handled in GameRoom constructor)
-  createRoom(hostSocketId, hostPlayerName) {
+  // mode: 'classic' | 'practice'
+  createRoom(hostSocketId, hostPlayerName, mode = 'classic') {
     const code       = this._generateCode();
     const hostPlayerId = uuidv4();
-    const room       = new GameRoom(code, hostSocketId, hostPlayerId, hostPlayerName);
+    const room       = new GameRoom(code, hostSocketId, hostPlayerId, hostPlayerName, mode);
     this.rooms.set(code, room);
     return { room, hostPlayerId };
   }
